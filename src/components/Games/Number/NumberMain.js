@@ -61,17 +61,30 @@ export const NumberMain = () => {
     setNum(RandomNumberInRange(1, 90000));
   };
 
+ const [guess, setGuess] = useState("");
+
+  const handleinput = (e) => {
+    setGuess(e.target.value);
+  };
+
+ const handleGuess = (e) => {
+  if (guess === num);
+    console.log("correct");
+
+ };
+
+
   return (
     <BigContainer>
       <NumberTile>
       <TargetNumber>{num}</TargetNumber>
       </NumberTile>
-      
-      <Input type="text" placeholder="enter your guess"></Input>
-      <GenerateButton onClick={handleClick}>Change Number</GenerateButton>
+      <Input type="number" placeholder="enter your guess" onChange={handleinput} value={guess}></Input>
+      <GenerateButton onClick={handleGuess} onClick={handleClick} ></GenerateButton>
     </BigContainer>
-
   );
+
+  
 
 };
 
