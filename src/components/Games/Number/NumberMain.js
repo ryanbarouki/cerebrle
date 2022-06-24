@@ -17,13 +17,17 @@ const BigContainer = styled.div`
 `;
 
 const NumberTile = styled.div`
-  width: 5rem;
+  display: flex;
+  min-width: 5rem;
+  width: fit-content;
   height: 5rem;
-  background-color: lightgray;
+  background-color: pink;
   justify-content: center;
   text-align: center;
   border-radius: 5px;
-  //center h1 vertically 
+  flex-direction: column;
+  align-items: center;
+  
 `;
 
 
@@ -54,7 +58,7 @@ export const NumberMain = () => {
   };
 
   const handleClick = () => {
-    setNum(RandomNumberInRange(1, 999999999));
+    setNum(RandomNumberInRange(1, 90000));
   };
 
   return (
