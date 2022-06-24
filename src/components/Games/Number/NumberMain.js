@@ -16,10 +16,21 @@ const BigContainer = styled.div`
   align-items: center;
 `;
 
+const NumberTile = styled.div`
+  width: 5rem;
+  height: 5rem;
+  background-color: lightgray;
+  justify-content: center;
+  text-align: center;
+  border-radius: 5px;
+  //center h1 vertically 
+`;
+
 
 const TargetNumber = styled.h1`
   color: lightblue;
   font-size: 3rem;
+  text-align: center;
 `;
 
 const GenerateButton = styled.button`
@@ -31,6 +42,8 @@ const GenerateButton = styled.button`
 const Input = styled.input`
   background-color: whitesmoke;
   text-align: center;
+  padding: 5px;
+  margin: 5px;
 `;
 
 export const NumberMain = () => {
@@ -46,7 +59,10 @@ export const NumberMain = () => {
 
   return (
     <BigContainer>
+      <NumberTile>
       <TargetNumber>{num}</TargetNumber>
+      </NumberTile>
+      
       <Input type="text" placeholder="enter your guess"></Input>
       <GenerateButton onClick={handleClick}>Change Number</GenerateButton>
     </BigContainer>
