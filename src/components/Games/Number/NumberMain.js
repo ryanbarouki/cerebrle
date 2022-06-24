@@ -1,7 +1,6 @@
 import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
-import cerebrleLogo from './cerebrle_logo.svg';
 import React from 'react';
 import { useState } from 'react';
 
@@ -9,16 +8,12 @@ import { useState } from 'react';
 const BigContainer = styled.div`
   display: flex;
   text-align: center;
-  position: absolute;
   overflow: auto;
   height: 100%;
   width: 100%;
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  @media (prefers-color-scheme: dark) {
-  background-color: #121212;
-  }
 `;
 
 
@@ -38,7 +33,7 @@ const Input = styled.input`
   text-align: center;
 `;
 
-const GenerateNumber = () => {
+export const NumberMain = () => {
   const [num, setNum] = useState(0);
 
   function RandomNumberInRange(min, max) {
@@ -66,5 +61,3 @@ const getDayString = () => {
 };
 
 
-
-export default GenerateNumber;

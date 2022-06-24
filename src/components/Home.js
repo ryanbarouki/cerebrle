@@ -7,16 +7,12 @@ import cerebrleLogo from '../cerebrle_logo.svg';
 const BigContainer = styled.div`
   display: flex;
   text-align: center;
-  position: absolute;
   overflow: auto;
   height: 100%;
   width: 100%;
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  @media (prefers-color-scheme: dark) {
-  background-color: #121212;
-  }
 `;
 
 const Logo = styled.img`
@@ -34,7 +30,7 @@ export const Home = () => {
 
   return (
     <BigContainer>
-      <Logo src={cerebrleLogo} alt="logo" />            
+        <div>Links to all the games to go here</div>
     </BigContainer>
   );
 }
