@@ -1,5 +1,8 @@
 import styled from "styled-components"
 import { useEffect, useState } from "react";
+import { ToastContainer, Flip } from "react-toastify";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Grid = styled.div`
   display: grid;
@@ -13,10 +16,12 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align:center;
   gap: 1rem;
 `;
 
 const Square = styled.div`
+  transition: 0.2s;
   padding: 30px;
   aspect-ratio: 1/1;
   background-color: ${props => props.hightlight ? "white" : "darkgray"};
@@ -34,7 +39,7 @@ const Button = styled.button`
   border-width: 0px;
   padding: 10px;
   :active {
-    background-color: white;
+    background-color: darkgray;
   }
 `;
 
@@ -65,6 +70,7 @@ export const SequenceMain = () => {
     if (inputSequence[inputSequence.length-1] === sequence[inputSequence.length-1]){
     } else {
       setGameOver(true);
+      toast(`Game Over! Score: ${level}`, {autoClose: 2000});
     }
 
     if (inputSequence.length === level) {
@@ -76,7 +82,7 @@ export const SequenceMain = () => {
       setSequence(sequence => [...sequence, nextInSequence]);
       setLevel(level+1);
     }
-  }, [inputSequence])
+  }, [inputSequence]);
 
   const handleClick = (index) => {
     if (gameOver || level === null) return;
@@ -92,6 +98,12 @@ export const SequenceMain = () => {
 
   return (
     <Container>
+      <ToastContainer
+        hideProgressBar
+        position="top-center"
+        transition={Flip}
+        autoClose={false}
+      />
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
           <Square  disabled={level === null || gameOver} key={index} hightlight={index === highlighedSquare} 
