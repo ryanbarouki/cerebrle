@@ -72,14 +72,14 @@ export const NumberMain = () => {
     setGuess(0);
   };
 
- const [guess, setGuess] = useState("");
+ const [guess, setGuess] = useState('');
 
   const handleinput = (e) => {
     setGuess(e.target.value);
   };
 
  const handleGuess = (e) => {
-  if (guess === num) {
+  if (Number(guess) === num) {
     console.log("correct");
   } else {
     console.log("no match");
@@ -105,7 +105,7 @@ export const NumberMain = () => {
       <NumberTile>
       <TargetNumber>{num}</TargetNumber>
       </NumberTile>
-      <Input type="number" placeholder="enter your guess" onChange={handleinput} ></Input>
+      <Input type="text" placeholder="enter your guess" onChange={handleinput} ></Input>
       <GenerateButton onClick={handleClick} >new number</GenerateButton>
       <GuessButton onClick={handleGuess}> Guess </GuessButton>
     </BigContainer>
