@@ -1,7 +1,7 @@
 import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 
@@ -41,6 +41,16 @@ const GenerateButton = styled.button`
   color: lightblue;
   background-color: whitesmoke;
   margin: 1rem;
+  min-width: 5rem;
+
+`;
+
+const GuessButton = styled.button`
+  color: lightblue;
+  background-color: whitesmoke;
+  margin: 1rem;
+  min-width: 5rem;
+
 `;
 
 const Input = styled.input`
@@ -58,7 +68,8 @@ export const NumberMain = () => {
   };
 
   const handleClick = () => {
-    setNum(RandomNumberInRange(1, 90000));
+    setNum(RandomNumberInRange(1, 9));
+    setGuess(0);
   };
 
  const [guess, setGuess] = useState("");
@@ -68,10 +79,25 @@ export const NumberMain = () => {
   };
 
  const handleGuess = (e) => {
-  if (guess === num);
+  if (guess === num) {
     console.log("correct");
-
+  } else {
+    console.log("no match");
+  }
+  console.log(num);
+  console.log(guess);
  };
+
+//  useEffect(() => {
+//   if (guess === num) {
+//     console.log("correct");
+//   } else {
+//     console.log("no match");
+//   }
+
+//   console.log("guess at if is " + guess );
+//   console.log("num at if is " + num);
+// })
 
 
   return (
@@ -79,8 +105,9 @@ export const NumberMain = () => {
       <NumberTile>
       <TargetNumber>{num}</TargetNumber>
       </NumberTile>
-      <Input type="number" placeholder="enter your guess" onChange={handleinput} value={guess}></Input>
-      <GenerateButton onClick={handleGuess} onClick={handleClick} ></GenerateButton>
+      <Input type="number" placeholder="enter your guess" onChange={handleinput} ></Input>
+      <GenerateButton onClick={handleClick} >new number</GenerateButton>
+      <GuessButton onClick={handleGuess}> Guess </GuessButton>
     </BigContainer>
   );
 
