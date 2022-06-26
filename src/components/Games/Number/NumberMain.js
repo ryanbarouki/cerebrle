@@ -27,7 +27,6 @@ const NumberTile = styled.div`
   border-radius: 5px;
   flex-direction: column;
   align-items: center;
-  
 `;
 
 
@@ -37,7 +36,7 @@ const TargetNumber = styled.h1`
   text-align: center;
 `;
 
-const GenerateButton = styled.button`
+const StartButton = styled.button`
   color: lightblue;
   background-color: whitesmoke;
   margin: 1rem;
@@ -61,15 +60,25 @@ const Input = styled.input`
 `;
 
 export const NumberMain = () => {
-  const [num, setNum] = useState(0);
+  const [num, setNum] = useState(Math.floor(Math.random() *  (9 - 1 +1)) +1);
+  const [newNum, setNewNum] = useState(Math.floor(Math.random() *  (9 - 1 +1)) +1);
 
   function RandomNumberInRange(min, max) {
     return Math.floor(Math.random() * (max - min +1)) + min;
   };
 
-  const handleClick = () => {
-    setNum(RandomNumberInRange(1, 9));
+  const handleClick = (e) => {
+    setNewNum(RandomNumberInRange(1, 9));
+    setNum(String(num) + String(newNum)); 
+      if (String(guess) === String(num)) {
+        console.log("correct");
+      } else {
+        console.log("no match");
+      }
+      console.log(num);
+      console.log(guess);
     setGuess(0);
+
   };
 
  const [guess, setGuess] = useState('');
@@ -78,41 +87,16 @@ export const NumberMain = () => {
     setGuess(e.target.value);
   };
 
- const handleGuess = (e) => {
-  if (Number(guess) === num) {
-    console.log("correct");
-  } else {
-    console.log("no match");
-  }
-  console.log(num);
-  console.log(guess);
- };
-
-//  useEffect(() => {
-//   if (guess === num) {
-//     console.log("correct");
-//   } else {
-//     console.log("no match");
-//   }
-
-//   console.log("guess at if is " + guess );
-//   console.log("num at if is " + num);
-// })
-
-
   return (
     <BigContainer>
       <NumberTile>
       <TargetNumber>{num}</TargetNumber>
       </NumberTile>
       <Input type="text" placeholder="enter your guess" onChange={handleinput} ></Input>
-      <GenerateButton onClick={handleClick} >new number</GenerateButton>
-      <GuessButton onClick={handleGuess}> Guess </GuessButton>
+      <StartButton>new number</StartButton>
+      <GuessButton onClick={handleClick}> Start </GuessButton>
     </BigContainer>
   );
-
-  
-
 };
 
 
