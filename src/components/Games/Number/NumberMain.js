@@ -1,7 +1,7 @@
 import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 
 
@@ -17,13 +17,16 @@ const BigContainer = styled.div`
 `;
 
 const NumberTile = styled.div`
-  width: 5rem;
+  display: flex;
+  min-width: 5rem;
+  width: fit-content;
   height: 5rem;
-  background-color: lightgray;
+  background-color: pink;
   justify-content: center;
   text-align: center;
   border-radius: 5px;
-  //center h1 vertically 
+  flex-direction: column;
+  align-items: center;
 `;
 
 
@@ -33,10 +36,12 @@ const TargetNumber = styled.h1`
   text-align: center;
 `;
 
-const GenerateButton = styled.button`
+const GuessButton = styled.button`
   color: lightblue;
   background-color: whitesmoke;
   margin: 1rem;
+  min-width: 5rem;
+
 `;
 
 const Input = styled.input`
@@ -46,15 +51,28 @@ const Input = styled.input`
   margin: 5px;
 `;
 
-export const NumberMain = () => {
-  const [num, setNum] = useState(0);
-
-  function RandomNumberInRange(min, max) {
-    return Math.floor(Math.random() * (max - min +1)) + min;
+function randomNumberInRange(min, max) {
+    return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
 
-  const handleClick = () => {
-    setNum(RandomNumberInRange(1, 999999999));
+export const NumberMain = () => {
+  const [num, setNum] = useState(randomNumberInRange(0,9));
+
+  const [guess, setGuess] = useState('');
+
+  const handleClick = (e) => { 
+      if (guess === num) {
+        console.log("correct");
+      } else {
+        console.log("no match");
+      }
+      setNum(num + randomNumberInRange(0, 9));
+    setGuess(0);
+
+  };
+
+  const handleInput = (e) => {
+    setGuess(e.target.value);
   };
 
   return (
@@ -62,13 +80,10 @@ export const NumberMain = () => {
       <NumberTile>
       <TargetNumber>{num}</TargetNumber>
       </NumberTile>
-      
-      <Input type="text" placeholder="enter your guess"></Input>
-      <GenerateButton onClick={handleClick}>Change Number</GenerateButton>
+      <Input type="text" placeholder="enter your guess" onChange={handleInput} ></Input>
+      <GuessButton onClick={handleClick}> Start </GuessButton>
     </BigContainer>
-
   );
-
 };
 
 
