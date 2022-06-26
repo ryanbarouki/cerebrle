@@ -36,14 +36,6 @@ const TargetNumber = styled.h1`
   text-align: center;
 `;
 
-const StartButton = styled.button`
-  color: lightblue;
-  background-color: whitesmoke;
-  margin: 1rem;
-  min-width: 5rem;
-
-`;
-
 const GuessButton = styled.button`
   color: lightblue;
   background-color: whitesmoke;
@@ -59,31 +51,27 @@ const Input = styled.input`
   margin: 5px;
 `;
 
-export const NumberMain = () => {
-  const [num, setNum] = useState(Math.floor(Math.random() *  (9 - 1 +1)) +1);
-  const [newNum, setNewNum] = useState(Math.floor(Math.random() *  (9 - 1 +1)) +1);
-
-  function RandomNumberInRange(min, max) {
-    return Math.floor(Math.random() * (max - min +1)) + min;
+function randomNumberInRange(min, max) {
+    return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
 
-  const handleClick = (e) => {
-    setNewNum(RandomNumberInRange(1, 9));
-    setNum(String(num) + String(newNum)); 
-      if (String(guess) === String(num)) {
+export const NumberMain = () => {
+  const [num, setNum] = useState(randomNumberInRange(0,9));
+
+  const [guess, setGuess] = useState('');
+
+  const handleClick = (e) => { 
+      if (guess === num) {
         console.log("correct");
       } else {
         console.log("no match");
       }
-      console.log(num);
-      console.log(guess);
+      setNum(num + randomNumberInRange(0, 9));
     setGuess(0);
 
   };
 
- const [guess, setGuess] = useState('');
-
-  const handleinput = (e) => {
+  const handleInput = (e) => {
     setGuess(e.target.value);
   };
 
@@ -92,8 +80,7 @@ export const NumberMain = () => {
       <NumberTile>
       <TargetNumber>{num}</TargetNumber>
       </NumberTile>
-      <Input type="text" placeholder="enter your guess" onChange={handleinput} ></Input>
-      <StartButton>new number</StartButton>
+      <Input type="text" placeholder="enter your guess" onChange={handleInput} ></Input>
       <GuessButton onClick={handleClick}> Start </GuessButton>
     </BigContainer>
   );
