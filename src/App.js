@@ -1,24 +1,26 @@
 import styled from 'styled-components';
 import { Main } from './components/Main';
 import cerebrleLogo from './cerebrle_logo.svg';
+import altLogo from './cerebrle_logo_2.svg';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 1rem;
 `;
 
 const Logo = styled.img`
-  height: 5rem;
+  height: 3rem;
   pointer-events: none;
-  font-family: "Boston-Regular";
+  margin-top: 1rem;
 `;
 
 function App() {
 
   return (
     <Container>
-      <Logo src={cerebrleLogo} alt="logo" />            
+      <Logo src={altLogo} alt="logo" />            
       {/* Navigation bar can go here */}
       <Main></Main>
     </Container>

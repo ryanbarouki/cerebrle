@@ -1,6 +1,34 @@
+@font-face {
+  font-family: 'Boston-Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Boston-Regular'), url('./fonts/BostonRegular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Boston-Light';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Boston-Light'), url('./fonts/BostonLight.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Boston-Thin';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Boston-Thin'), url('./fonts/BostonThin.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Boston-ExtraLight';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Boston-ExtraLight'), url('./fonts/BostonExtraLight.woff') format('woff');
+}
+
 body {
   margin: 0;
-  font-family: Boston-Regular;
+  font-family: "Boston-Regular";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
