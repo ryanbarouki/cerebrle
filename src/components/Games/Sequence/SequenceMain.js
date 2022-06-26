@@ -24,7 +24,7 @@ const Square = styled.div`
   transition: 0.2s;
   padding: 30px;
   aspect-ratio: 1/1;
-  background-color: ${props => props.hightlight ? "white" : "darkgray"};
+  background-color: ${props => props.hightlight ? "#FC8B9D" : "#029BDD"};
   border-radius: 3px;
   ${({disabled}) => !disabled && `
     :active {
