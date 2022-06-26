@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
+import './fonts/BostonRegular.woff';
+import './fonts/BostonLight.woff';
+import './fonts/BostonThin.woff';
+import './fonts/BostonExtraLight.woff';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
