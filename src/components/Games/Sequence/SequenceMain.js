@@ -24,11 +24,11 @@ const Square = styled.div`
   transition: 0.2s;
   padding: 30px;
   aspect-ratio: 1/1;
-  background-color: ${props => props.hightlight ? "#FC8B9D" : "#029BDD"};
+  background-color: ${props => props.hightlight ? "#fba8b5" : "#45acd8"};
   border-radius: 3px;
   ${({disabled}) => !disabled && `
     :active {
-      background-color: white;
+      background-color: #fba8b5;
     }
   `}
 `;
