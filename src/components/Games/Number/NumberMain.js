@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { DateTime } from 'luxon';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { ToastContainer, Flip } from "react-toastify";
+import { toast } from 'react-toastify';
 
 
 const BigContainer = styled.div`
@@ -18,12 +20,16 @@ const BigContainer = styled.div`
 
 const NumberTile = styled.div`
   display: flex;
-  min-width: 5rem;
+  min-width: 10rem;
   width: fit-content;
-  height: 5rem;
+  height: 10rem;
+  padding: 0;
   background-color: pink;
   justify-content: center;
   text-align: center;
+  border-color: #187594;
+  border-style: solid;
+  border-width: 1px;
   border-radius: 5px;
   flex-direction: column;
   align-items: center;
@@ -32,44 +38,74 @@ const NumberTile = styled.div`
 
 const TargetNumber = styled.h1`
   color: lightblue;
-  font-size: 3rem;
+  font-size: 8rem;
   text-align: center;
 `;
 
 const GuessButton = styled.button`
-  color: lightblue;
-  background-color: whitesmoke;
-  margin: 1rem;
-  min-width: 5rem;
-
+  min-width: 10rem;
+  border-radius: 8px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  padding: 5px;
+  :active {
+    background-color: darkgray;
+  }
+  font-size: 1rem;
 `;
 
 const Input = styled.input`
   background-color: whitesmoke;
   text-align: center;
-  padding: 5px;
+  padding: 0px;
   margin: 5px;
+  width: 10rem;
+  border-radius: 5px;
+  
 `;
 
+const displayNum = " "
 function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
 
 export const NumberMain = () => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
-
+  const [score, setScore] = useState(1);
   const [guess, setGuess] = useState('');
 
+  const [showDiv, setshowDiv] = useState(true);
+  useEffect(() => {
+    setTimeout(function () {
+      setshowDiv(false);
+    }, 5000);
+    }, []);
+
   const handleClick = (e) => { 
+    
+      setTimeout(function () {
+        setshowDiv(false);
+      }, 5000);
+      document.getElementById("guess").value="";
       if (guess === num) {
-        console.log("correct");
+        setScore(score+1);
+        toast("Correct, Level " + score + " complete", {autoClose: 1000});
+        setNum(num + randomNumberInRange(0, 9));
+
+        setTimeout(function () {
+          setshowDiv(true);
+        }, 1);
+
       } else {
-        console.log("no match");
+        toast("Incorrect!, you got to level " + score, {autoClose: 5000});
+        setScore(1)
       }
-      setNum(num + randomNumberInRange(0, 9));
+      
     setGuess(0);
 
   };
+  
 
   const handleInput = (e) => {
     setGuess(e.target.value);
@@ -77,10 +113,22 @@ export const NumberMain = () => {
 
   return (
     <BigContainer>
+    <ToastContainer
+        hideProgressBar
+        position="top-center"
+        transition={Flip}
+        autoClose={true}
+      />
       <NumberTile>
+
+      {showDiv ? (
       <TargetNumber>{num}</TargetNumber>
+       ): (
+          <div></div>
+        )}{" "}
+
       </NumberTile>
-      <Input type="text" placeholder="enter your guess" onChange={handleInput} ></Input>
+      <Input type="text" placeholder="enter your guess" onChange={handleInput} id="guess" ></Input>
       <GuessButton onClick={handleClick}> Start </GuessButton>
     </BigContainer>
   );
