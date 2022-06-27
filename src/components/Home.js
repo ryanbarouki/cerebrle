@@ -5,7 +5,7 @@ import cerebrleLogo from '../cerebrle_logo.svg';
 import { Link } from 'react-router-dom';
 import sequenceIcon from '../icons/sequence_icon.svg'
 import numberIcon from '../icons/number_icon.svg'
-import verbalIcon from '../icons/verbal_icon.svg'
+import wordGameIcon from '../icons/word_icon.svg'
 
 
 const BigContainer = styled.div`
@@ -67,9 +67,9 @@ export const Home = () => {
             <div>Number Memory</div>
           </Card>
         </Link>
-        <Link to="/verbal" style={{textDecoration: "none"}}>
+        <Link to="/word" style={{textDecoration: "none"}}>
           <Card>
-            <Icon src={verbalIcon}/>
+            <Icon src={wordGameIcon}/>
             <div>Verbal Memory</div>
           </Card>
         </Link>
