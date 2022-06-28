@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 
 const BigContainer = styled.div`
@@ -63,6 +64,7 @@ function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
 
+const NUM_SHOW_DURATION = 5000;
 export const NumberMain = () => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
   const [score, setScore] = useState(0);
@@ -75,7 +77,7 @@ export const NumberMain = () => {
       setShowNum(true);
       setTimeout(() => {
         setShowNum(false);
-      }, 5000);
+      }, NUM_SHOW_DURATION);
       return;
     }
 
@@ -87,7 +89,7 @@ export const NumberMain = () => {
 
       setTimeout(() => {
         setShowNum(false);
-      }, 5000);
+      }, NUM_SHOW_DURATION);
 
     } else {
       toast("Incorrect!, you got to level " + score, { autoClose: 5000 });
@@ -119,9 +121,16 @@ export const NumberMain = () => {
         score === 0 ? 
           <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
         :
-        showNum ? 
+        true ? 
           <NumberTile>
-            <TargetNumber>{num}</TargetNumber>
+              <TargetNumber>{num}</TargetNumber>
+              <CountdownCircleTimer
+                isPlaying
+                duration={NUM_SHOW_DURATION/1000}
+                colors={["#FC8B9D"]}
+                size={60}
+              >
+              </CountdownCircleTimer>
           </NumberTile>
         :
           <NumberTile>
