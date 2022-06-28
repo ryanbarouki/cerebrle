@@ -59,7 +59,6 @@ const Input = styled.input`
   
 `;
 
-const displayNum = " "
 function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
@@ -102,6 +101,13 @@ export const NumberMain = () => {
     setGuess(e.target.value);
   };
 
+  const handleEnter = e => {
+    console.log("Hi")
+    if (e.keyCode === 13) {
+      handleClick();
+    }
+  };
+
   return (
     <BigContainer>
     <ToastContainer
@@ -120,7 +126,7 @@ export const NumberMain = () => {
           </NumberTile>
         :
           <NumberTile>
-          <Input type="text" disabled={showNum} placeholder="enter your guess" onChange={handleInput} value={guess}></Input>
+          <Input type="text" disabled={showNum} placeholder="enter your guess" onChange={handleInput} value={guess} onKeyDown={handleEnter} autoFocus="autofocus" onFocus="this.select()"></Input>
           <GuessButton onClick={handleClick}>{"Guess"}</GuessButton>
           </NumberTile>
       }
