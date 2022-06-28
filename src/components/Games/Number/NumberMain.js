@@ -102,7 +102,6 @@ export const NumberMain = () => {
   };
 
   const handleEnter = e => {
-    console.log("Hi")
     if (e.keyCode === 13) {
       handleClick();
     }
@@ -126,7 +125,13 @@ export const NumberMain = () => {
           </NumberTile>
         :
           <NumberTile>
-          <Input type="text" disabled={showNum} placeholder="enter your guess" onChange={handleInput} value={guess} onKeyDown={handleEnter} autoFocus="autofocus" onFocus="this.select()"></Input>
+          <Input type="text" 
+                disabled={showNum} 
+                placeholder="enter your guess" 
+                onChange={handleInput} 
+                value={guess} 
+                onKeyDown={handleEnter} 
+                autoFocus/>
           <GuessButton onClick={handleClick}>{"Guess"}</GuessButton>
           </NumberTile>
       }
