@@ -5,12 +5,12 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 
 const BigContainer = styled.div`
   display: flex;
   text-align: center;
-  overflow: auto;
   height: 100%;
   width: 100%;
   justify-content: flex-start;
@@ -21,94 +21,105 @@ const BigContainer = styled.div`
 const NumberTile = styled.div`
   display: flex;
   min-width: 10rem;
-  width: fit-content;
-  height: 10rem;
+  width: 100%;
   padding: 0;
-  background-color: pink;
   justify-content: center;
   text-align: center;
-  border-color: #187594;
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 5px;
   flex-direction: column;
   align-items: center;
 `;
 
 
-const TargetNumber = styled.h1`
-  color: lightblue;
-  font-size: 8rem;
+const TargetNumber = styled.div`
+  color: #45acd8;
+  font-size: 4rem;
   text-align: center;
+  width: 100%;
+  word-wrap: break-word;
 `;
 
 const GuessButton = styled.button`
-  min-width: 10rem;
   border-radius: 8px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: black;
-  padding: 5px;
+  border-width: 0px;
+  padding: 1rem 2rem;
   :active {
     background-color: darkgray;
   }
   font-size: 1rem;
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+
+    :active {
+      background-color: #000;
+    }
+  }
 `;
 
 const Input = styled.input`
   background-color: whitesmoke;
   text-align: center;
-  padding: 0px;
-  margin: 5px;
-  width: 10rem;
+  font-size: 1.5rem;
+  padding: 1rem;
+  margin: 0.5rem;
+  width: 12rem;
   border-radius: 5px;
-  
+  border-width: 0;
+  :focus {
+    outline: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+  }
 `;
 
-const displayNum = " "
 function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
 
+const NUM_SHOW_DURATION = 5000;
 export const NumberMain = () => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
-  const [score, setScore] = useState(1);
+  const [score, setScore] = useState(0);
   const [guess, setGuess] = useState('');
+  const [showNum, setShowNum] = useState(false);
 
-  const [showDiv, setshowDiv] = useState(true);
-  useEffect(() => {
-    setTimeout(function () {
-      setshowDiv(false);
-    }, 5000);
-    }, []);
+  const handleClick = (e) => {
+    if (score === 0) {
+      setScore(1);
+      setShowNum(true);
+      setTimeout(() => {
+        setShowNum(false);
+      }, NUM_SHOW_DURATION);
+      return;
+    }
 
-  const handleClick = (e) => { 
-    
-      setTimeout(function () {
-        setshowDiv(false);
-      }, 5000);
-      document.getElementById("guess").value="";
-      if (guess === num) {
-        setScore(score+1);
-        toast("Correct, Level " + score + " complete", {autoClose: 1000});
-        setNum(num + randomNumberInRange(0, 9));
+    if (guess === num) {
+      setScore(score + 1);
+      setNum(num + randomNumberInRange(0, 9));
+      setShowNum(true);
 
-        setTimeout(function () {
-          setshowDiv(true);
-        }, 1);
+      setTimeout(() => {
+        setShowNum(false);
+      }, NUM_SHOW_DURATION);
 
-      } else {
-        toast("Incorrect!, you got to level " + score, {autoClose: 5000});
-        setScore(1)
-      }
-      
-    setGuess(0);
-
+    } else {
+      toast("Incorrect!, you got to level " + score, { autoClose: 5000 });
+      setScore(1)
+    }
+    setGuess("");
   };
   
 
   const handleInput = (e) => {
     setGuess(e.target.value);
+  };
+
+  const handleEnter = e => {
+    if (e.keyCode === 13) {
+      handleClick();
+    }
   };
 
   return (
@@ -119,17 +130,33 @@ export const NumberMain = () => {
         transition={Flip}
         autoClose={true}
       />
-      <NumberTile>
-
-      {showDiv ? (
-      <TargetNumber>{num}</TargetNumber>
-       ): (
-          <div></div>
-        )}{" "}
-
-      </NumberTile>
-      <Input type="text" placeholder="enter your guess" onChange={handleInput} id="guess" ></Input>
-      <GuessButton onClick={handleClick}> Start </GuessButton>
+      {
+        score === 0 ? 
+          <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
+        :
+        showNum ? 
+          <NumberTile>
+              <TargetNumber>{num}</TargetNumber>
+              <CountdownCircleTimer
+                isPlaying
+                duration={NUM_SHOW_DURATION/1000}
+                colors={["#FC8B9D"]}
+                size={60}
+              >
+              </CountdownCircleTimer>
+          </NumberTile>
+        :
+          <NumberTile>
+          <Input type="text" 
+                disabled={showNum} 
+                placeholder="enter your guess" 
+                onChange={handleInput} 
+                value={guess} 
+                onKeyDown={handleEnter} 
+                autoFocus/>
+          <GuessButton onClick={handleClick}>{"Guess"}</GuessButton>
+          </NumberTile>
+      }
     </BigContainer>
   );
 };
