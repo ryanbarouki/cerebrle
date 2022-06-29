@@ -11,7 +11,6 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 const BigContainer = styled.div`
   display: flex;
   text-align: center;
-  overflow: auto;
   height: 100%;
   width: 100%;
   justify-content: flex-start;
@@ -22,7 +21,7 @@ const BigContainer = styled.div`
 const NumberTile = styled.div`
   display: flex;
   min-width: 10rem;
-  width: fit-content;
+  width: 100%;
   padding: 0;
   justify-content: center;
   text-align: center;
@@ -32,21 +31,29 @@ const NumberTile = styled.div`
 
 
 const TargetNumber = styled.div`
-  color: lightblue;
-  font-size: 5rem;
+  color: #45acd8;
+  font-size: 4rem;
   text-align: center;
+  width: 100%;
+  word-wrap: break-word;
 `;
 
 const GuessButton = styled.button`
   border-radius: 8px;
-  border-style: solid;
-  border-width: 2px;
-  border-color: black;
+  border-width: 0px;
   padding: 1rem 2rem;
   :active {
     background-color: darkgray;
   }
   font-size: 1rem;
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+
+    :active {
+      background-color: #000;
+    }
+  }
 `;
 
 const Input = styled.input`
@@ -57,7 +64,14 @@ const Input = styled.input`
   margin: 0.5rem;
   width: 12rem;
   border-radius: 5px;
-  
+  border-width: 0;
+  :focus {
+    outline: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+  }
 `;
 
 function randomNumberInRange(min, max) {
@@ -83,7 +97,6 @@ export const NumberMain = () => {
 
     if (guess === num) {
       setScore(score + 1);
-      toast("Correct, Level " + score + " complete", { autoClose: 1000 });
       setNum(num + randomNumberInRange(0, 9));
       setShowNum(true);
 
@@ -121,7 +134,7 @@ export const NumberMain = () => {
         score === 0 ? 
           <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
         :
-        true ? 
+        showNum ? 
           <NumberTile>
               <TargetNumber>{num}</TargetNumber>
               <CountdownCircleTimer
