@@ -77,10 +77,6 @@ const Input = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
-
-  [type=number] {
-    -moz-appearance: textfield;
-  }
 `;
 
 function randomNumberInRange(min, max) {
