@@ -72,6 +72,15 @@ const Input = styled.input`
     color: #DADADA;
     background-color: #1F2023;  
   }
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  [type=number] {
+    -moz-appearance: textfield;
+  }
 `;
 
 function randomNumberInRange(min, max) {
@@ -147,7 +156,7 @@ export const NumberMain = () => {
           </NumberTile>
         :
           <NumberTile>
-          <Input type="text" 
+          <Input type="number" 
                 disabled={showNum} 
                 placeholder="enter your guess" 
                 onChange={handleInput} 
