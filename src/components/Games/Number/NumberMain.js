@@ -140,7 +140,7 @@ export const NumberMain = () => {
       >
       
       </StatsModal>
-      console.log(StatsModal.played)
+      
       {
         score === 0 ? 
           <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
