@@ -43,6 +43,18 @@ const Button = styled.button`
   }
 `;
 
+const SInfoButton = styled.button`
+border-radius: 8px;
+border-style: solid;
+margin-left: 5px;
+border-width: 0px;
+padding: 10px;
+:active {
+  background-color: darkgray;
+}
+
+`;
+
 const NUMBER_IN_GRID = 9
 export const SequenceMain = () => {
   const [sequence, setSequence] = useState([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
@@ -89,6 +101,10 @@ export const SequenceMain = () => {
     setInputSequence(sequence => [...sequence, index]);
   };
 
+  const handlesInfoClick = (e) => {
+    toast("Think Simon Says! When you click start, 1 tile will flash, after it's flashed, click the same tile. Each round adds an additional tile to the sequence, and they have to be clicked in the correct order too. One incorrect click and game over!", { autoClose: 10000 })
+  }
+
   const handleStartGame = () => {
     setSequence([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
     setInputSequence([]);
@@ -111,7 +127,10 @@ export const SequenceMain = () => {
           ></Square>
         ))}
       </Grid>
+      <div>
       <Button onClick={handleStartGame}>Start Game</Button>
+      <SInfoButton onClick={handlesInfoClick}>How to Play</SInfoButton>
+      </div>
     </Container>
   )
 }

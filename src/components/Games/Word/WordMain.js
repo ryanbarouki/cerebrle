@@ -39,6 +39,18 @@ const Score = styled.div`
   font-size: 1.2rem;
 `;
 
+const WordInfoButton = styled.button`
+border-radius: 8px;
+border-style: solid;
+border-width: 0px;
+padding: 10px;
+min-width: 4rem;
+:active {
+  background-color: darkgray;
+}
+
+`;
+
 const NUMBER_OF_LIVES = 3;
 export const WordMain = () => {
   const [score, setScore] = useState(0);
@@ -46,6 +58,11 @@ export const WordMain = () => {
   const [seenWords, setSeenWords] = useState([]);
   const [currentWord, setCurrentWord] = useState(randomWords());
   const [isNewWord, setIsNewWord] = useState(true);
+
+
+  const handleWInfoClick = (e) => {
+    toast("There is no time limit in this game, all you have to do is remember if the word on the screen has appeared in this test before. If the word has appeared before click “seen” if not, click “new”. ", { autoClose: 10000 })
+  };
 
   useEffect(() => {
     if (lives === 0) {
@@ -95,6 +112,7 @@ export const WordMain = () => {
         <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
         <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
       </RowContainer>
+      <WordInfoButton onClick={handleWInfoClick}>How to Play</WordInfoButton>
     </Container>
   )
 }
