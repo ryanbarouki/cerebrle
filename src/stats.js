@@ -1,17 +1,30 @@
 import { DateTime } from "luxon";
 import { loadAllResults } from "./save_local";
 
-export function getStatsData() {
-    const allGuesses = loadAllResults();
+
+const getHistogram = (data, binSize) => {
   
-    const allGuessesEntries = Object.entries(allGuesses);
-    console.log(allGuessesEntries);
-    const played = allGuessesEntries.length;
+}
+
+export function getStatsData() {
+    const allResults = loadAllResults();
+  
+    const allResultsEntries = Object.entries(allResults);
+    const sequenceResults = allResultsEntries.map(([date, result]) => ({date: date, result: result.sequence}));
+    const numberResults = allResultsEntries.map(([date, result]) => ({date: date, result: result.number}));
+    const wordResults = allResultsEntries.map(([date, result]) => ({date: date, result: result.word}));
+
+    console.log(numberResults)
+    const played = allResultsEntries.length;
   
     // Playing streak
     // guess distributions
     // max score for each one
     // score over time
   
-    return;
+    return {
+      sequenceResults,
+      numberResults,
+      wordResults
+    };
   }
