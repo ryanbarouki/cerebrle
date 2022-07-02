@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import sequenceIcon from '../icons/sequence_icon.svg'
 import numberIcon from '../icons/number_icon.svg'
 import wordGameIcon from '../icons/word_icon.svg'
+import statsIcon from '../icons/stats_icon.svg'
 
 
 const BigContainer = styled.div`
@@ -71,6 +72,12 @@ export const Home = () => {
           <Card>
             <Icon src={wordGameIcon}/>
             <div>Verbal Memory</div>
+          </Card>
+        </Link>
+        <Link to="/stats" style={{textDecoration: "none"}}>
+          <Card>
+            <Icon src={statsIcon}/>
+            <div>Statistics</div>
           </Card>
         </Link>
     </BigContainer>
