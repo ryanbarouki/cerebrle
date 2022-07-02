@@ -41,19 +41,20 @@ const Button = styled.button`
   :active {
     background-color: darkgray;
   }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+
+    :active {
+      background-color: #000;
+    }
+  }
 `;
 
-const SInfoButton = styled.button`
-border-radius: 8px;
-border-style: solid;
-margin-left: 5px;
-border-width: 0px;
-padding: 10px;
-:active {
-  background-color: darkgray;
-}
-
+const ButtonContainer = styled.div`
+  {display: flex; gap: 5px;}
 `;
+
 
 const NUMBER_IN_GRID = 9
 export const SequenceMain = () => {
@@ -127,10 +128,10 @@ export const SequenceMain = () => {
           ></Square>
         ))}
       </Grid>
-      <div>
+      <ButtonContainer>
       <Button onClick={handleStartGame}>Start Game</Button>
-      <SInfoButton onClick={handlesInfoClick}>How to Play</SInfoButton>
-      </div>
+      <Button onClick={handlesInfoClick}>How to Play</Button>
+      </ButtonContainer>
     </Container>
   )
 }

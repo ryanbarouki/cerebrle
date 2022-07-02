@@ -29,6 +29,15 @@ const Button = styled.button`
   :active {
     background-color: darkgray;
   }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+  }
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 const Word = styled.div`
@@ -37,18 +46,6 @@ const Word = styled.div`
 
 const Score = styled.div`
   font-size: 1.2rem;
-`;
-
-const WordInfoButton = styled.button`
-border-radius: 8px;
-border-style: solid;
-border-width: 0px;
-padding: 10px;
-min-width: 4rem;
-:active {
-  background-color: darkgray;
-}
-
 `;
 
 const NUMBER_OF_LIVES = 3;
@@ -112,7 +109,7 @@ export const WordMain = () => {
         <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
         <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
       </RowContainer>
-      <WordInfoButton onClick={handleWInfoClick}>How to Play</WordInfoButton>
+      <Button onClick={handleWInfoClick}>How to Play</Button>
     </Container>
   )
 }

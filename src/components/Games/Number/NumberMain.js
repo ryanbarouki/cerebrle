@@ -38,7 +38,7 @@ const TargetNumber = styled.div`
   word-wrap: break-word;
 `;
 
-const GuessButton = styled.button`
+const NumButton = styled.button`
   border-radius: 8px;
   border-width: 0px;
   padding: 1rem 2rem;
@@ -56,23 +56,9 @@ const GuessButton = styled.button`
   }
 `;
 
-const NumberInfoButton = styled.button`
-border-radius: 8px;
-  border-width: 0px;
-  padding: 1rem 2rem;
-  :active {
-    background-color: darkgray;
-  }
-  font-size: 1rem;
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
+const ButtonContainer = styled.div`
+{display: flex; gap: 5px;};
 
-    :active {
-      background-color: #000;
-    }
-  }
-  margin-left: 5px;
 `;
 
 const Input = styled.input`
@@ -162,10 +148,10 @@ export const NumberMain = () => {
       />
       {
         score === 0 ? 
-        <div>
-          <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
-          <NumberInfoButton onClick={handleinfoClick}>{"How to Play"}</NumberInfoButton>
-        </div>
+        <ButtonContainer>
+          <NumButton onClick={handleClick}>{"Start"}</NumButton>
+          <NumButton onClick={handleinfoClick}>{"How to Play"}</NumButton>
+        </ButtonContainer>
         :
         showNum ? 
           <NumberTile>
@@ -187,7 +173,7 @@ export const NumberMain = () => {
                 value={guess} 
                 onKeyDown={handleEnter} 
                 autoFocus/>
-          <GuessButton onClick={handleClick}>{"Guess"}</GuessButton>
+          <NumButton onClick={handleClick}>{"Guess"}</NumButton>
           </NumberTile>
       }
     </BigContainer>
