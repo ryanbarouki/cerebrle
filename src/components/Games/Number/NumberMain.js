@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { StatsModal } from '../../StatsModal';
+
 
 const BigContainer = styled.div`
   display: flex;
@@ -135,12 +135,6 @@ export const NumberMain = () => {
         transition={Flip}
         autoClose={true}
       />
-      <StatsModal played={"1"}
-
-      >
-      
-      </StatsModal>
-      
       {
         score === 0 ? 
           <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
