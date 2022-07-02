@@ -3,12 +3,21 @@ import { SequenceMain } from './Games/Sequence/SequenceMain';
 import { NumberMain } from './Games/Number/NumberMain';
 import { WordMain } from './Games/Word/WordMain';
 import { Home } from './Home';
+import { useMemo } from 'react';
+import { DateTime } from 'luxon';
 
-export const Main = () => (
-  <Routes>
-    <Route exact path='/' element={<Home/>}></Route>
-    <Route exact path='/number' element={<NumberMain/>}></Route>
-    <Route exact path='/sequence' element={<SequenceMain/>}></Route>
-    <Route exact path='/word' element={<WordMain/>}></Route>
-  </Routes>
-);
+const getDayString = () => {
+  return DateTime.now().toFormat("yyyy-MM-dd");
+};
+
+export const Main = () => {
+  const dayString = useMemo(getDayString, []);
+  return (
+    <Routes>
+      <Route exact path='/' element={<Home/>}></Route>
+      <Route exact path='/number' element={<NumberMain dayString={dayString}/>}></Route>
+      <Route exact path='/sequence' element={<SequenceMain dayString={dayString}/>}></Route>
+      <Route exact path='/word' element={<WordMain dayString={dayString}/>}></Route>
+    </Routes>
+  );
+}

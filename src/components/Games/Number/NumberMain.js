@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { saveResults } from '../../../save_local';
 
 
 const BigContainer = styled.div`
@@ -84,7 +85,7 @@ function randomNumberInRange(min, max) {
   };
 
 const NUM_SHOW_DURATION = 5000;
-export const NumberMain = () => {
+export const NumberMain = ({dayString}) => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
   const [score, setScore] = useState(0);
   const [guess, setGuess] = useState('');
@@ -111,6 +112,7 @@ export const NumberMain = () => {
 
     } else {
       toast("Incorrect!, you got to level " + score, { autoClose: 5000 });
+      saveResults(dayString, "number", score);
       setScore(1)
     }
     setGuess("");
