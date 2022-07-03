@@ -4,6 +4,8 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults } from "../../../save_local";
+import { Link } from 'react-router-dom';
+
 
 const Grid = styled.div`
   display: grid;
@@ -123,6 +125,14 @@ export const SequenceMain = ({dayString}) => {
         transition={Flip}
         autoClose={false}
       />
+      <ButtonContainer>
+        <Link to="/" style={{textDecoration: "none"}}>
+        <Button> Home </Button>
+      </Link>
+      <Link to="/Number" style={{textDecoration: "none"}}>
+          <Button> To Number Game</Button>
+      </Link>
+       </ButtonContainer>
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
           <Square  disabled={level === null || gameOver} key={index} hightlight={index === highlighedSquare} 
@@ -133,6 +143,7 @@ export const SequenceMain = ({dayString}) => {
       <ButtonContainer>
       <Button onClick={handleStartGame}>Start Game</Button>
       <Button onClick={handlesInfoClick}>How to Play</Button>
+      
       </ButtonContainer>
     </Container>
   )

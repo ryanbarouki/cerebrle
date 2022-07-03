@@ -5,6 +5,7 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults } from "../../../save_local";
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -47,6 +48,12 @@ const Word = styled.div`
 
 const Score = styled.div`
   font-size: 1.2rem;
+`;
+
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 5px;
 `;
 
 const NUMBER_OF_LIVES = 3;
@@ -103,6 +110,14 @@ export const WordMain = ({dayString}) => {
         transition={Flip}
         autoClose={false}
       />
+      <ButtonContainer>
+        <Link to="/" style={{textDecoration: "none"}}>
+        <Button> Home </Button>
+      </Link>
+      <Link to="/stats" style={{textDecoration: "none"}}>
+          <Button> To Statistics</Button>
+      </Link>
+       </ButtonContainer>
       <RowContainer>
         <Score>{`Lives: ${lives} | Score: ${score}`}</Score>
       </RowContainer>
@@ -111,7 +126,7 @@ export const WordMain = ({dayString}) => {
         <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
         <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
       </RowContainer>
-      <Button onClick={handleWInfoClick}>How to Play</Button>
+      <Button onClick={handleWInfoClick}>How to play</Button>
     </Container>
   )
 }

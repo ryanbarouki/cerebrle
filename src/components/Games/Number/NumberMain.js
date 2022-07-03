@@ -7,6 +7,7 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { saveResults } from '../../../save_local';
+import { Link } from 'react-router-dom';
 
 
 const BigContainer = styled.div`
@@ -60,7 +61,7 @@ const NumButton = styled.button`
 const ButtonContainer = styled.div`
 display: flex; 
 gap: 5px;;
-
+margin: 5px;
 `;
 
 const Input = styled.input`
@@ -102,6 +103,8 @@ export const NumberMain = ({dayString}) => {
   const handleinfoClick = (e) => {
     toast("A number will appear on the screen for 5 seconds, once the 5 seconds runs out, enter the number into the guess box. Each correct round will add 1 additonal digit to the end. If you guess wrong once, game over!", { autoClose: 10000 })
  }
+
+ 
 
   const handleClick = (e) => {
     if (score === 0) {
@@ -149,12 +152,24 @@ export const NumberMain = ({dayString}) => {
         transition={Flip}
         autoClose={true}
       />
+
+      <ButtonContainer>
+      <Link to="/" style={{textDecoration: "none"}}>
+        <NumButton> Home </NumButton>
+      </Link>
+      <Link to="/word" style={{textDecoration: "none"}}>
+          <NumButton>Verbal Memory</NumButton>
+      </Link>
+      </ButtonContainer>
+
       {
         score === 0 ? 
+        
         <ButtonContainer>
           <NumButton onClick={handleClick}>{"Start"}</NumButton>
           <NumButton onClick={handleinfoClick}>{"How to Play"}</NumButton>
         </ButtonContainer>
+    
         :
         showNum ? 
           <NumberTile>
