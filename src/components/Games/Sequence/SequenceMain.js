@@ -52,7 +52,8 @@ const Button = styled.button`
 `;
 
 const ButtonContainer = styled.div`
-  {display: flex; gap: 5px;}
+  display: flex;
+  gap: 5px;
 `;
 
 
