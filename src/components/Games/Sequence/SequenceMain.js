@@ -42,7 +42,21 @@ const Button = styled.button`
   :active {
     background-color: darkgray;
   }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+
+    :active {
+      background-color: #000;
+    }
+  }
 `;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
 
 const NUMBER_IN_GRID = 9
 export const SequenceMain = ({dayString}) => {
@@ -90,6 +104,10 @@ export const SequenceMain = ({dayString}) => {
     setInputSequence(sequence => [...sequence, index]);
   };
 
+  const handlesInfoClick = (e) => {
+    toast("Think Simon Says! When you click start, 1 tile will flash, after it's flashed, click the same tile. Each round adds an additional tile to the sequence, and they have to be clicked in the correct order too. One incorrect click and game over!", { autoClose: 10000 })
+  }
+
   const handleStartGame = () => {
     setSequence([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
     setInputSequence([]);
@@ -112,7 +130,10 @@ export const SequenceMain = ({dayString}) => {
           ></Square>
         ))}
       </Grid>
+      <ButtonContainer>
       <Button onClick={handleStartGame}>Start Game</Button>
+      <Button onClick={handlesInfoClick}>How to Play</Button>
+      </ButtonContainer>
     </Container>
   )
 }
