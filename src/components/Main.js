@@ -3,7 +3,7 @@ import { SequenceMain } from './Games/Sequence/SequenceMain';
 import { NumberMain } from './Games/Number/NumberMain';
 import { WordMain } from './Games/Word/WordMain';
 import { Home } from './Home';
-import { StatsView } from './StatsView';
+import { StatsView } from './Stats/StatsView';
 import { useMemo } from 'react';
 import { DateTime } from 'luxon';
 
