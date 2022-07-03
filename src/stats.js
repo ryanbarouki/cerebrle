@@ -43,9 +43,9 @@ export function getStatsData(binSize) {
     // score over time
   
     return {
-      sequenceResults,
-      numberResults,
-      wordResults,
+      results: {sequence: sequenceResults,
+                number: numberResults,
+                word: wordResults},
       maxScores: {sequence: maxSequenceScore,
                   number: maxNumberScore,
                   word: maxWordScore},

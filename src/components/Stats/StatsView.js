@@ -14,36 +14,20 @@ const Container = styled.div`
 `;
 
 const BIN_SIZE = 10;
-export const StatsView = () => {
-	const { sequenceResults, 
-        numberResults,
-        wordResults,
+export const StatsView = ({game}) => {
+	const { results, 
         maxScores,
         gamesPlayed,
         distributions } = getStatsData(BIN_SIZE);
+  let name = {sequence: "Sequence",
+              number: "Number",
+              word: "Verbal"};
 
-	const data = [{date: "2022-07-01", score: 12}, {date: "2022-07-02", score: 9}, {date: "2022-07-03", score: 10},  {date: "2022-07-04", score: 14}, {date: "2022-07-20", score: 7}];
 	return (
 		<Container>
-			{ sequenceResults.length > 0 &&
-			<>
-				<div>Sequence Memory Scores</div>
-				<TimeSeriesGraph data={sequenceResults}/>
-			</>
-			}
-			{ numberResults.length > 0 &&
-			<>
-				<div>Number Memory Scores</div>
-				<TimeSeriesGraph data={numberResults}/>
-			</>
-			}
-			{ wordResults.length > 0 &&
-			<>
-				<div>Verbal Memory Scores</div>
-				<TimeSeriesGraph data={wordResults}/>
-        <Histogram data={distributions.word}/>
-			</>
-			}
+      <div>{name[game]} Memory Scores</div>
+      <TimeSeriesGraph data={results[game]} />
+      <Histogram data={distributions[game]} />
 		</Container>
 	);
 }

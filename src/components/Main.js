@@ -20,6 +20,9 @@ export const Main = () => {
       <Route exact path='/sequence' element={<SequenceMain dayString={dayString}/>}></Route>
       <Route exact path='/word' element={<WordMain dayString={dayString}/>}></Route>
       <Route exact path='/stats' element={<StatsView dayString={dayString}/>}></Route>
+      <Route exact path='/stats/sequence' element={<StatsView game={"sequence"}/>}></Route>
+      <Route exact path='/stats/number' element={<StatsView game={"number"}/>}></Route>
+      <Route exact path='/stats/word' element={<StatsView game={"word"}/>}></Route>
     </Routes>
   );
 }
