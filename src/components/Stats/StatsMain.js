@@ -1,12 +1,10 @@
+
 import seedrandom from 'seedrandom';
 import styled from 'styled-components';
-import { DateTime } from 'luxon';
-import cerebrleLogo from '../cerebrle_logo.svg';
 import { Link } from 'react-router-dom';
-import sequenceIcon from '../icons/sequence_icon.svg'
-import numberIcon from '../icons/number_icon.svg'
-import wordGameIcon from '../icons/word_icon.svg'
-import statsIcon from '../icons/stats_icon.svg'
+import sequenceIcon from '../../icons/sequence_icon.svg'
+import numberIcon from '../../icons/number_icon.svg'
+import wordGameIcon from '../../icons/word_icon.svg'
 
 
 const BigContainer = styled.div`
@@ -48,36 +46,27 @@ const Icon = styled.img`
   width: 2rem;
 `;
 
-const getDayString = () => {
-  return DateTime.now().toFormat("yyyy-MM-dd");
-};
-
-export const Home = () => {
+export const StatsMain = () => {
 
   return (
     <BigContainer>
-        <Link to="/sequence" style={{textDecoration: "none"}}>
+        <div>View your stats for each game!</div>
+        <Link to="/stats/sequence" style={{textDecoration: "none"}}>
           <Card>
             <Icon src={sequenceIcon}/>
-            <div>Sequence Memory</div>
+            <div>Sequence Memory Stats</div>
           </Card>
         </Link>
-        <Link to="/number" style={{textDecoration: "none"}}>
+        <Link to="/stats/number" style={{textDecoration: "none"}}>
           <Card>
             <Icon src={numberIcon}/>
-            <div>Number Memory</div>
+            <div>Number Memory Stats</div>
           </Card>
         </Link>
-        <Link to="/word" style={{textDecoration: "none"}}>
+        <Link to="/stats/word" style={{textDecoration: "none"}}>
           <Card>
             <Icon src={wordGameIcon}/>
-            <div>Verbal Memory</div>
-          </Card>
-        </Link>
-        <Link to="/stats" style={{textDecoration: "none"}}>
-          <Card>
-            <Icon src={statsIcon}/>
-            <div>Statistics</div>
+            <div>Verbal Memory Stats</div>
           </Card>
         </Link>
     </BigContainer>

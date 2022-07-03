@@ -1,56 +1,58 @@
 import { DateTime } from "luxon";
-import { loadAllGuesses } from "./save_local";
+import { loadAllResults } from "./save_local";
 
-export function getStatsData() {
-    const allGuesses = loadAllGuesses();
+const getHistogram = (data, binSize, maxBin) => {
+  let hist = {};
+  for (let i = 0; i <= maxBin; i++) {
+    hist[i] = 0;
+  }
+  data.forEach(value => {
+    if (value === null) return;
+    const bin = Math.floor(value / binSize);
+    hist[bin]++;
+  });
+  let histList = [];
+  for (const key in hist) {
+    histList.push({value: key*binSize, freq: hist[key]})
+  }
+  histList.push({value: (maxBin+1)*binSize, freq: 0});
+  return histList;
+}
+
+export function getStatsData(binSize) {
+    const allResults = loadAllResults();
   
-    const allGuessesEntries = Object.entries(allGuesses);
-    const played = allGuessesEntries.length;
-  
-    const guessDistribution = {
-      1: 0,
-      2: 0,
-      3: 0
-    };
-  
-    let currentStreak = 0;
-    let maxStreak = 0;
-    let previousDate = null;
-    for (const [dayString, guesses] of allGuessesEntries) {
-      const currentDate = DateTime.fromFormat(dayString, "yyyy-MM-dd");
-      const winIndex = guesses.findIndex((guess) => guess.delta === 0);
-      const won = winIndex >= 0;
-      if (won) {
-        const tryCount = winIndex + 1;
-        guessDistribution[tryCount]++;
-  
-        if (
-          previousDate == null ||
-          previousDate.plus({ days: 1 }).hasSame(currentDate, "day")
-        ) {
-          currentStreak++;
-        } else {
-          currentStreak = 1;
-        }
-      } else {
-        currentStreak = 0;
-      }
-  
-      if (currentStreak > maxStreak) {
-        maxStreak = currentStreak;
-      }
-      previousDate = currentDate;
-    }
-  
-    const winCount = Object.values(guessDistribution).reduce(
-      (total, tries) => total + tries
-    );
+    const allResultsEntries = Object.entries(allResults);
+    const sequenceResults = allResultsEntries.map(([date, result]) => ({date: date, score: result.sequence ?? null}));
+    const numberResults = allResultsEntries.map(([date, result]) => ({date: date, score: result.number ?? null}));
+    const wordResults = allResultsEntries.map(([date, result]) => ({date: date, score: result.word ?? null}));
+
+    const maxSequenceScore = Math.max(...sequenceResults.map(entry => entry.score));
+    const maxNumberScore = Math.max(...numberResults.map(entry => entry.score));
+    const maxWordScore = Math.max(...wordResults.map(entry => entry.score));
+
+    const sequenceDist = getHistogram(sequenceResults.map(entry => entry.score), binSize, Math.floor(maxSequenceScore/binSize));
+    const numberDist = getHistogram(numberResults.map(entry => entry.score), binSize, Math.floor(maxNumberScore/binSize));
+    const wordDist = getHistogram(wordResults.map(entry => entry.score), binSize, Math.floor(maxWordScore/binSize));
+
+    const played = allResultsEntries.length;
+
+    // Days played
+    // Playing streak
+    // guess distributions
+    // max score for each one
+    // score over time
   
     return {
-      currentStreak: currentStreak,
-      maxStreak: maxStreak,
-      played,
-      winRatio: winCount / (played || 1),
-      guessDistribution: guessDistribution,
+      results: {sequence: sequenceResults,
+                number: numberResults,
+                word: wordResults},
+      maxScores: {sequence: maxSequenceScore,
+                  number: maxNumberScore,
+                  word: maxWordScore},
+      gamesPlayed: played,
+      distributions: {sequence: sequenceDist,
+                      number: numberDist,
+                      word: wordDist}
     };
   }

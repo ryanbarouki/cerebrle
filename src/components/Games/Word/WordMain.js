@@ -4,6 +4,7 @@ import randomWords from 'random-words';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { saveResults } from "../../../save_local";
 
 const Container = styled.div`
   display: flex;
@@ -49,7 +50,7 @@ const Score = styled.div`
 `;
 
 const NUMBER_OF_LIVES = 3;
-export const WordMain = () => {
+export const WordMain = ({dayString}) => {
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(NUMBER_OF_LIVES);
   const [seenWords, setSeenWords] = useState([]);
@@ -64,6 +65,7 @@ export const WordMain = () => {
   useEffect(() => {
     if (lives === 0) {
       toast("Game Over!", {autoClose: 2000});
+      saveResults(dayString, "word", score);
     }
   }, [lives]);
 

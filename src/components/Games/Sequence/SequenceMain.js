@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { saveResults } from "../../../save_local";
 
 const Grid = styled.div`
   display: grid;
@@ -58,7 +59,7 @@ const ButtonContainer = styled.div`
 
 
 const NUMBER_IN_GRID = 9
-export const SequenceMain = () => {
+export const SequenceMain = ({dayString}) => {
   const [sequence, setSequence] = useState([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
   const [inputSequence, setInputSequence] = useState([]);
   const [level, setLevel] = useState(null);
@@ -81,8 +82,8 @@ export const SequenceMain = () => {
   useEffect(() => {
     if (inputSequence.length === 0) return;
 
-    if (inputSequence[inputSequence.length-1] === sequence[inputSequence.length-1]){
-    } else {
+    if (inputSequence[inputSequence.length-1] !== sequence[inputSequence.length-1]){
+      saveResults(dayString, "sequence", level);
       setGameOver(true);
       toast(`Game Over! Score: ${level}`, {autoClose: 2000});
     }
