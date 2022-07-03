@@ -1,6 +1,7 @@
 # TODO
-- Add a back button
+- Add a back to home button from each game
+- Add a back to main stats page from each sub stats page
+- Add a next game button from each game
 - Make games only playable once per day
-- Fix issue on netlify when going straight to subdomain "page not found"
 - Add more stats to StatsView
 - Some way to share results
