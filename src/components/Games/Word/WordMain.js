@@ -29,6 +29,15 @@ const Button = styled.button`
   :active {
     background-color: darkgray;
   }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+  }
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 `;
 
 const Word = styled.div`
@@ -46,6 +55,11 @@ export const WordMain = () => {
   const [seenWords, setSeenWords] = useState([]);
   const [currentWord, setCurrentWord] = useState(randomWords());
   const [isNewWord, setIsNewWord] = useState(true);
+
+
+  const handleWInfoClick = (e) => {
+    toast("There is no time limit in this game, all you have to do is remember if the word on the screen has appeared in this test before. If the word has appeared before click “seen” if not, click “new”. ", { autoClose: 10000 })
+  };
 
   useEffect(() => {
     if (lives === 0) {
@@ -95,6 +109,7 @@ export const WordMain = () => {
         <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
         <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
       </RowContainer>
+      <Button onClick={handleWInfoClick}>How to Play</Button>
     </Container>
   )
 }

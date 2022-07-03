@@ -38,7 +38,7 @@ const TargetNumber = styled.div`
   word-wrap: break-word;
 `;
 
-const GuessButton = styled.button`
+const NumButton = styled.button`
   border-radius: 8px;
   border-width: 0px;
   padding: 1rem 2rem;
@@ -54,6 +54,12 @@ const GuessButton = styled.button`
       background-color: #000;
     }
   }
+`;
+
+const ButtonContainer = styled.div`
+display: flex; 
+gap: 5px;;
+
 `;
 
 const Input = styled.input`
@@ -83,12 +89,18 @@ function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
 
+
 const NUM_SHOW_DURATION = 5000;
 export const NumberMain = () => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
   const [score, setScore] = useState(0);
   const [guess, setGuess] = useState('');
   const [showNum, setShowNum] = useState(false);
+
+
+  const handleinfoClick = (e) => {
+    toast("A number will appear on the screen for 5 seconds, once the 5 seconds runs out, enter the number into the guess box. Each correct round will add 1 additonal digit to the end. If you guess wrong once, game over!", { autoClose: 10000 })
+ }
 
   const handleClick = (e) => {
     if (score === 0) {
@@ -137,7 +149,10 @@ export const NumberMain = () => {
       />
       {
         score === 0 ? 
-          <GuessButton onClick={handleClick}>{"Start"}</GuessButton>
+        <ButtonContainer>
+          <NumButton onClick={handleClick}>{"Start"}</NumButton>
+          <NumButton onClick={handleinfoClick}>{"How to Play"}</NumButton>
+        </ButtonContainer>
         :
         showNum ? 
           <NumberTile>
@@ -159,7 +174,7 @@ export const NumberMain = () => {
                 value={guess} 
                 onKeyDown={handleEnter} 
                 autoFocus/>
-          <GuessButton onClick={handleClick}>{"Guess"}</GuessButton>
+          <NumButton onClick={handleClick}>{"Guess"}</NumButton>
           </NumberTile>
       }
     </BigContainer>
