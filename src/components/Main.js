@@ -4,6 +4,7 @@ import { NumberMain } from './Games/Number/NumberMain';
 import { WordMain } from './Games/Word/WordMain';
 import { Home } from './Home';
 import { StatsView } from './Stats/StatsView';
+import { StatsMain } from './Stats/StatsMain';
 import { useMemo } from 'react';
 import { DateTime } from 'luxon';
 
@@ -19,7 +20,7 @@ export const Main = () => {
       <Route exact path='/number' element={<NumberMain dayString={dayString}/>}></Route>
       <Route exact path='/sequence' element={<SequenceMain dayString={dayString}/>}></Route>
       <Route exact path='/word' element={<WordMain dayString={dayString}/>}></Route>
-      <Route exact path='/stats' element={<StatsView dayString={dayString}/>}></Route>
+      <Route exact path='/stats' element={<StatsMain />}></Route>
       <Route exact path='/stats/sequence' element={<StatsView game={"sequence"}/>}></Route>
       <Route exact path='/stats/number' element={<StatsView game={"number"}/>}></Route>
       <Route exact path='/stats/word' element={<StatsView game={"word"}/>}></Route>

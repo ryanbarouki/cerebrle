@@ -15,6 +15,7 @@ const getHistogram = (data, binSize, maxBin) => {
   for (const key in hist) {
     histList.push({value: key*binSize, freq: hist[key]})
   }
+  histList.push({value: (maxBin+1)*binSize, freq: 0});
   return histList;
 }
 
