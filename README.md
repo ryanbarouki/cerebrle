@@ -3,5 +3,5 @@
 - Add a back to main stats page from each sub stats page
 - Add a next game button from each game
 - Make games only playable once per day
-- Add more stats to StatsView
 - Some way to share results
+- favicons

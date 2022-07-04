@@ -33,12 +33,17 @@ const Button = styled.button`
   }
 `;
 
-const BIN_SIZE = 10;
+const Title = styled.div`
+  font-size: 2rem;
+  text-align: center;
+`;
+
 export const StatsView = ({game}) => {
 	const { results, 
-        maxScores,
-        gamesPlayed,
-        distributions } = getStatsData(BIN_SIZE);
+        maxScore,
+        distribution,
+        played,
+        streak } = getStatsData()[game];
   let name = {sequence: "Sequence",
               number: "Number",
               word: "Verbal"};
@@ -46,11 +51,13 @@ export const StatsView = ({game}) => {
   return (
     <Container>
       {
-        results[game].length !== 0 ?
+        results.length !== 0 ?
           <>
-            <div>{name[game]} Memory Scores</div>
-            <TimeSeriesGraph data={results[game]} />
-            <Histogram data={distributions[game]} />
+            <Title>{name[game]} Memory Scores</Title>
+            <div>Max Score - <strong>{maxScore}</strong> | Days Played - <strong>{played}</strong></div>
+            <div>Playing Streak - <strong>{streak}</strong></div>
+            <TimeSeriesGraph data={results} />
+            <Histogram data={distribution} />
           </> :
           <>
             <div>No stats yet!</div>
