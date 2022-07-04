@@ -19,40 +19,43 @@ const getHistogram = (data, binSize, maxBin) => {
   return histList;
 }
 
-export function getStatsData(binSize) {
+const calculateStreak = (results) => {
+  let previousDate = null;
+  let currentStreak = 0;
+  for (const {date, score} of results) {
+    const currentDate = DateTime.fromFormat(date, "yyyy-MM-dd");
+    if (
+      previousDate == null ||
+      previousDate.plus({ days: 1 }).hasSame(currentDate, "day")
+    ) {
+      currentStreak++;
+    } else {
+      currentStreak = 1;
+    }
+    previousDate = currentDate;
+  }
+  return currentStreak
+};
+
+const getGameStats = (allResultsEntries, game, binSize) => {
+  const results = allResultsEntries.map(([date, result]) => ({ date: date, score: result[game] ?? null }));
+  const fileredResults = results.filter(({ date, score }) => score !== null);
+  const allScores = results.map(entry => entry.score);
+  const maxScore = Math.max(...allScores);
+  const distribution = getHistogram(allScores, binSize, Math.floor(maxScore/binSize));
+
+  return {results: fileredResults, maxScore, distribution, played: results.length, streak: calculateStreak(results)};
+};
+
+export function getStatsData() {
     const allResults = loadAllResults();
-  
     const allResultsEntries = Object.entries(allResults);
-    const sequenceResults = allResultsEntries.map(([date, result]) => ({date: date, score: result.sequence ?? null}));
-    const numberResults = allResultsEntries.map(([date, result]) => ({date: date, score: result.number ?? null}));
-    const wordResults = allResultsEntries.map(([date, result]) => ({date: date, score: result.word ?? null}));
 
-    const maxSequenceScore = Math.max(...sequenceResults.map(entry => entry.score));
-    const maxNumberScore = Math.max(...numberResults.map(entry => entry.score));
-    const maxWordScore = Math.max(...wordResults.map(entry => entry.score));
-
-    const sequenceDist = getHistogram(sequenceResults.map(entry => entry.score), binSize, Math.floor(maxSequenceScore/binSize));
-    const numberDist = getHistogram(numberResults.map(entry => entry.score), binSize, Math.floor(maxNumberScore/binSize));
-    const wordDist = getHistogram(wordResults.map(entry => entry.score), binSize, Math.floor(maxWordScore/binSize));
-
-    const played = allResultsEntries.length;
-
-    // Days played
     // Playing streak
-    // guess distributions
-    // max score for each one
-    // score over time
   
     return {
-      results: {sequence: sequenceResults,
-                number: numberResults,
-                word: wordResults},
-      maxScores: {sequence: maxSequenceScore,
-                  number: maxNumberScore,
-                  word: maxWordScore},
-      gamesPlayed: played,
-      distributions: {sequence: sequenceDist,
-                      number: numberDist,
-                      word: wordDist}
+      sequence: getGameStats(allResultsEntries, "sequence", 1),
+      number: getGameStats(allResultsEntries, "number", 1),
+      word: getGameStats(allResultsEntries, "word", 10)
     };
   }
