@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { TimeSeriesGraph } from "./TimeSeriesGraph";
 import { Histogram } from "./Histogram";
 import { Link } from "react-router-dom";
+import { DateTime } from "luxon";
 
 const Container = styled.div`
 	display: flex;
@@ -56,7 +57,7 @@ export const StatsView = ({game}) => {
             <Title>{name[game]} Memory Scores</Title>
             <div>Max Score - <strong>{maxScore}</strong> | Days Played - <strong>{played}</strong></div>
             <div>Playing Streak - <strong>{streak}</strong></div>
-            <TimeSeriesGraph data={results} />
+            <TimeSeriesGraph data={results.map(({date, score}) => ({date: DateTime.fromFormat(date, "yyyy-MM-dd").toLocaleString(DateTime.DATE_FULL), score: score}))} />
             <Histogram data={distribution} />
           </> :
           <>
