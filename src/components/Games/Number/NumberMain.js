@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { saveResults } from '../../../save_local';
 import { Link } from 'react-router-dom';
-
+import { HelpOutline } from '@mui/icons-material';
+import { Button } from '@mui/material';
 
 const BigContainer = styled.div`
   display: flex;
@@ -87,6 +88,29 @@ const Input = styled.input`
   }
 `;
 
+const HelpIcon = styled(HelpOutline)`
+  color: black; 
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  }
+`;
+
+const TitleBarDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TitleBar = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr;
+  margin-bottom: 1rem;
+  @media (prefers-color-scheme: dark) {
+    color: #fff;
+  }
+`;
+
 function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
@@ -152,14 +176,21 @@ export const NumberMain = ({dayString}) => {
         transition={Flip}
         autoClose={true}
       />
+        <TitleBar>
+          <TitleBarDiv>
+            <Button><HelpIcon onClick={handleinfoClick}></HelpIcon></Button>
+            
+          </TitleBarDiv>
+            
 
+        </TitleBar>
       <ButtonContainer>
       <Link to="/" style={{textDecoration: "none"}}>
-        <NumButton> Home </NumButton>
-      </Link>
-      <Link to="/word" style={{textDecoration: "none"}}>
-          <NumButton>Verbal Memory</NumButton>
-      </Link>
+                <NumButton> Home </NumButton>
+            </Link>
+            <Link to="/word" style={{textDecoration: "none"}}>
+                <NumButton>Verbal Memory</NumButton>
+            </Link>
       </ButtonContainer>
 
       {
@@ -167,7 +198,6 @@ export const NumberMain = ({dayString}) => {
         
         <ButtonContainer>
           <NumButton onClick={handleClick}>{"Start"}</NumButton>
-          <NumButton onClick={handleinfoClick}>{"How to Play"}</NumButton>
         </ButtonContainer>
     
         :

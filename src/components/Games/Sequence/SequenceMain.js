@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults } from "../../../save_local";
 import { Link } from 'react-router-dom';
+import InfoIcon from '@mui/icons-material/Info';
 
 
 const Grid = styled.div`
@@ -57,6 +58,50 @@ const Button = styled.button`
 const ButtonContainer = styled.div`
   display: flex;
   gap: 5px;
+`;
+
+const InfoIconB = styled(InfoIcon)`
+  color: black; 
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  };
+  font-size: 1.1rem !important;
+`;
+
+const HowtoButton = styled.button`
+  border-radius: 8px;
+  border-style: solid;
+  border-width: 0px;
+  padding: 5px;
+  :active {
+    background-color: darkgray;
+  }
+  @media (prefers-color-scheme: dark) {
+    color: #DADADA;
+    background-color: #1F2023;  
+
+    :active {
+      background-color: #000;
+    }
+  }
+
+`;
+
+
+const TitleBarDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TitleBar = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto 1fr;
+  margin-bottom: 1rem;
+  @media (prefers-color-scheme: dark) {
+    color: #fff;
+  }
 `;
 
 
@@ -132,6 +177,7 @@ export const SequenceMain = ({dayString}) => {
       <Link to="/Number" style={{textDecoration: "none"}}>
           <Button> To Number Game</Button>
       </Link>
+      <HowtoButton onClick={handlesInfoClick}><InfoIconB></InfoIconB></HowtoButton>
        </ButtonContainer>
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
@@ -142,8 +188,6 @@ export const SequenceMain = ({dayString}) => {
       </Grid>
       <ButtonContainer>
       <Button onClick={handleStartGame}>Start Game</Button>
-      <Button onClick={handlesInfoClick}>How to Play</Button>
-      
       </ButtonContainer>
     </Container>
   )
