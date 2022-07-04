@@ -39,22 +39,21 @@ const Title = styled.div`
   text-align: center;
 `;
 
+const capitalise = ([first, ...rest]) => first.toUpperCase() + rest.join("");
+
 export const StatsView = ({game}) => {
 	const { results, 
         maxScore,
         distribution,
         played,
         streak } = getStatsData()[game];
-  let name = {sequence: "Sequence",
-              number: "Number",
-              word: "Verbal"};
 
   return (
     <Container>
       {
         results.length !== 0 ?
           <>
-            <Title>{name[game]} Memory Scores</Title>
+            <Title>{capitalise(game)} Memory Scores</Title>
             <div>Max Score - <strong>{maxScore}</strong> | Days Played - <strong>{played}</strong></div>
             <div>Playing Streak - <strong>{streak}</strong></div>
             <TimeSeriesGraph data={results.map(({date, score}) => ({date: DateTime.fromFormat(date, "yyyy-MM-dd").toLocaleString(DateTime.DATE_FULL), score: score}))} />
