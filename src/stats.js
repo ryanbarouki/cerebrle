@@ -22,7 +22,7 @@ const getHistogram = (data, binSize, maxBin) => {
 const calculateStreak = (results) => {
   let previousDate = null;
   let currentStreak = 0;
-  for (const {date, score} of results) {
+  for (const {date} of results) {
     const currentDate = DateTime.fromFormat(date, "yyyy-MM-dd");
     if (
       previousDate == null ||
@@ -49,10 +49,9 @@ const getGameStats = (allResultsEntries, game, binSize) => {
 
 export function getStatsData() {
     const allResults = loadAllResults();
+    console.log(allResults)
     const allResultsEntries = Object.entries(allResults);
 
-    // Playing streak
-  
     return {
       sequence: getGameStats(allResultsEntries, "sequence", 1),
       number: getGameStats(allResultsEntries, "number", 1),

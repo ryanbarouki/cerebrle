@@ -1,12 +1,12 @@
 import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { saveResults } from '../../../save_local';
+import { saveResults, loadAllResults } from '../../../save_local';
 
 
 const BigContainer = styled.div`
@@ -94,10 +94,17 @@ function randomNumberInRange(min, max) {
 const NUM_SHOW_DURATION = 5000;
 export const NumberMain = ({dayString}) => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
-  const [score, setScore] = useState(0);
+  const storedScore = useMemo(() => loadAllResults()[dayString]?.number, [dayString]);
+  const [score, setScore] = useState(storedScore ?? 0);
   const [guess, setGuess] = useState('');
   const [showNum, setShowNum] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
+  useEffect(() => {
+    if (storedScore) {
+      setGameOver(true);
+    }
+  }, []);
 
   const handleinfoClick = (e) => {
     toast("A number will appear on the screen for 5 seconds, once the 5 seconds runs out, enter the number into the guess box. Each correct round will add 1 additonal digit to the end. If you guess wrong once, game over!", { autoClose: 10000 })
@@ -125,7 +132,7 @@ export const NumberMain = ({dayString}) => {
     } else {
       toast("Incorrect!, you got to level " + score, { autoClose: 5000 });
       saveResults(dayString, "number", score);
-      setScore(1)
+      setGameOver(true);
     }
     setGuess("");
   };
@@ -170,13 +177,13 @@ export const NumberMain = ({dayString}) => {
         :
           <NumberTile>
           <Input type="number" 
-                disabled={showNum} 
+                disabled={gameOver} 
                 placeholder="enter your guess" 
                 onChange={handleInput} 
                 value={guess} 
                 onKeyDown={handleEnter} 
                 autoFocus/>
-          <NumButton onClick={handleClick}>{"Guess"}</NumButton>
+          <NumButton disabled={gameOver} onClick={handleClick}>{"Guess"}</NumButton>
           </NumberTile>
       }
     </BigContainer>
