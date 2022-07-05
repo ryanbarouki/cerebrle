@@ -5,6 +5,8 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults, loadAllResults } from "../../../save_local";
+import { Button } from "../../GlobalStyles";
+import { strings } from "../../../strings";
 
 const Container = styled.div`
   display: flex;
@@ -19,26 +21,6 @@ const RowContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-`;
-
-const Button = styled.button`
-  border-radius: 8px;
-  border-style: solid;
-  border-width: 0px;
-  padding: 10px;
-  min-width: 4rem;
-  :active {
-    background-color: darkgray;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-  }
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
 `;
 
 const Word = styled.div`
@@ -61,16 +43,18 @@ export const WordMain = ({dayString}) => {
   useEffect(() => {
     if (storedScore) {
       setLives(0);
+      toast(strings.tomorrowToast, {autoClose: 2000});
     }
   }, []);
 
   const handleWInfoClick = (e) => {
-    toast("There is no time limit in this game, all you have to do is remember if the word on the screen has appeared in this test before. If the word has appeared before click “seen” if not, click “new”. ", { autoClose: 10000 })
+    toast(strings.howTo.word, { autoClose: 10000 })
   };
 
   useEffect(() => {
+    if (storedScore) return;
     if (lives === 0) {
-      toast("Game Over!", {autoClose: 2000});
+      toast(strings.endToast(score), {autoClose: 2000});
       saveResults(dayString, "word", score);
     }
   }, [lives]);
@@ -113,10 +97,12 @@ export const WordMain = ({dayString}) => {
         <Score>{`Lives: ${lives} | Score: ${score}`}</Score>
       </RowContainer>
       <Word>{currentWord}</Word>
-      <RowContainer>
-        <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
-        <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
-      </RowContainer>
+        {lives !== 0 &&
+          <RowContainer>
+            <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
+            <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
+          </RowContainer>
+        }
       <Button onClick={handleWInfoClick}>How to Play</Button>
     </Container>
   )

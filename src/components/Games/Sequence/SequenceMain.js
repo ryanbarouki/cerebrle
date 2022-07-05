@@ -4,6 +4,9 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults, loadAllResults } from "../../../save_local";
+import { Button } from "../../GlobalStyles";
+import { css } from "styled-components";
+import { strings } from "../../../strings";
 
 const Grid = styled.div`
   display: grid;
@@ -27,29 +30,11 @@ const Square = styled.div`
   aspect-ratio: 1/1;
   background-color: ${props => props.hightlight ? "#fba8b5" : "#45acd8"};
   border-radius: 3px;
-  ${({disabled}) => !disabled && `
+  ${({disabled}) => !disabled && css`
     :active {
       background-color: #fba8b5;
     }
   `}
-`;
-
-const Button = styled.button`
-  border-radius: 8px;
-  border-style: solid;
-  border-width: 0px;
-  padding: 10px;
-  :active {
-    background-color: darkgray;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-
-    :active {
-      background-color: #000;
-    }
-  }
 `;
 
 const ButtonContainer = styled.div`
@@ -70,6 +55,7 @@ export const SequenceMain = ({dayString}) => {
   useEffect(() => {
     if (storedScore) {
       setGameOver(true);
+      toast(strings.tomorrowToast, {autoClose: 2000});
     }
   }, []);
 
@@ -92,7 +78,8 @@ export const SequenceMain = ({dayString}) => {
     if (inputSequence[inputSequence.length-1] !== sequence[inputSequence.length-1]){
       saveResults(dayString, "sequence", score);
       setGameOver(true);
-      toast(`Game Over! Score: ${score}`, {autoClose: 2000});
+      toast(strings.endToast(score), {autoClose: 2000});
+      return;
     }
 
     if (inputSequence.length === score) {
@@ -112,13 +99,10 @@ export const SequenceMain = ({dayString}) => {
   };
 
   const handlesInfoClick = (e) => {
-    toast("Think Simon Says! When you click start, 1 tile will flash, after it's flashed, click the same tile. Each round adds an additional tile to the sequence, and they have to be clicked in the correct order too. One incorrect click and game over!", { autoClose: 10000 })
+    toast(strings.howTo.sequence, { autoClose: 10000 })
   }
 
   const handleStartGame = () => {
-    setSequence([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
-    setInputSequence([]);
-    setGameOver(false);
     setScore(1);
   };
 
@@ -130,6 +114,7 @@ export const SequenceMain = ({dayString}) => {
         transition={Flip}
         autoClose={false}
       />
+      {gameOver && <div>Today's score - <strong>{score}</strong></div>}
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
           <Square  disabled={score === 0 || gameOver} key={index} hightlight={index === highlighedSquare} 
@@ -138,7 +123,7 @@ export const SequenceMain = ({dayString}) => {
         ))}
       </Grid>
       <ButtonContainer>
-      <Button disabled={gameOver} onClick={handleStartGame}>Start Game</Button>
+      {score === 0 && <Button disabled={gameOver} onClick={handleStartGame}>Start Game</Button>}
       <Button onClick={handlesInfoClick}>How to Play</Button>
       </ButtonContainer>
     </Container>

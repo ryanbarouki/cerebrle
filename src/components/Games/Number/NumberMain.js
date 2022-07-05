@@ -1,4 +1,3 @@
-import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
 import React, { useEffect, useMemo } from 'react';
@@ -7,6 +6,8 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { saveResults, loadAllResults } from '../../../save_local';
+import { Button } from '../../GlobalStyles';
+import { strings } from '../../../strings';
 
 
 const BigContainer = styled.div`
@@ -17,6 +18,7 @@ const BigContainer = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 `;
 
 const NumberTile = styled.div`
@@ -37,24 +39,6 @@ const TargetNumber = styled.div`
   text-align: center;
   width: 100%;
   word-wrap: break-word;
-`;
-
-const NumButton = styled.button`
-  border-radius: 8px;
-  border-width: 0px;
-  padding: 1rem 2rem;
-  :active {
-    background-color: darkgray;
-  }
-  font-size: 1rem;
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-
-    :active {
-      background-color: #000;
-    }
-  }
 `;
 
 const ButtonContainer = styled.div`
@@ -103,12 +87,59 @@ export const NumberMain = ({dayString}) => {
   useEffect(() => {
     if (storedScore) {
       setGameOver(true);
+      toast(strings.tomorrowToast, {autoClose: 2000});
     }
   }, []);
 
   const handleinfoClick = (e) => {
-    toast("A number will appear on the screen for 5 seconds, once the 5 seconds runs out, enter the number into the guess box. Each correct round will add 1 additonal digit to the end. If you guess wrong once, game over!", { autoClose: 10000 })
+    toast(strings.howTo.number, { autoClose: 10000 })
  }
+
+  const render = () => {
+    if (gameOver) {
+      return (
+        <>
+          <div>Today's score - <strong>{score}</strong></div>
+          <Button onClick={handleinfoClick}>{"How to Play"}</Button>
+        </>
+      )
+    }
+    if (score === 0) {
+      return (
+        <ButtonContainer>
+          <Button onClick={handleClick}>{"Start"}</Button>
+          <Button onClick={handleinfoClick}>{"How to Play"}</Button>
+        </ButtonContainer>
+      );
+    }
+    if (showNum) {
+      return (
+        <NumberTile>
+          <TargetNumber>{num}</TargetNumber>
+          <CountdownCircleTimer
+            isPlaying
+            duration={NUM_SHOW_DURATION / 1000}
+            colors={["#FC8B9D"]}
+            size={60}
+          >
+          </CountdownCircleTimer>
+        </NumberTile>
+      );
+    } else {
+      return (
+        <NumberTile>
+          <Input type="number"
+            disabled={gameOver}
+            placeholder="enter your guess"
+            onChange={handleInput}
+            value={guess}
+            onKeyDown={handleEnter}
+            autoFocus />
+          <Button disabled={gameOver} onClick={handleClick}>{"Guess"}</Button>
+        </NumberTile>
+      );
+    }
+  };
 
   const handleClick = (e) => {
     if (score === 0) {
@@ -130,7 +161,7 @@ export const NumberMain = ({dayString}) => {
       }, NUM_SHOW_DURATION);
 
     } else {
-      toast("Incorrect!, you got to level " + score, { autoClose: 5000 });
+      toast(strings.endToast(score), { autoClose: 5000 });
       saveResults(dayString, "number", score);
       setGameOver(true);
     }
@@ -156,36 +187,7 @@ export const NumberMain = ({dayString}) => {
         transition={Flip}
         autoClose={true}
       />
-      {
-        score === 0 ? 
-        <ButtonContainer>
-          <NumButton onClick={handleClick}>{"Start"}</NumButton>
-          <NumButton onClick={handleinfoClick}>{"How to Play"}</NumButton>
-        </ButtonContainer>
-        :
-        showNum ? 
-          <NumberTile>
-              <TargetNumber>{num}</TargetNumber>
-              <CountdownCircleTimer
-                isPlaying
-                duration={NUM_SHOW_DURATION/1000}
-                colors={["#FC8B9D"]}
-                size={60}
-              >
-              </CountdownCircleTimer>
-          </NumberTile>
-        :
-          <NumberTile>
-          <Input type="number" 
-                disabled={gameOver} 
-                placeholder="enter your guess" 
-                onChange={handleInput} 
-                value={guess} 
-                onKeyDown={handleEnter} 
-                autoFocus/>
-          <NumButton disabled={gameOver} onClick={handleClick}>{"Guess"}</NumButton>
-          </NumberTile>
-      }
+      { render() }
     </BigContainer>
   );
 };
