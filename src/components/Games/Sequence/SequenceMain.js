@@ -71,20 +71,6 @@ const HowtoButton = styled.button`
   }
 `;
 
-const TitleBarDiv = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const TitleBar = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto 1fr;
-  margin-bottom: 1rem;
-  @media (prefers-color-scheme: dark) {
-    color: #fff;
-  }
-`;
 
 
 const NUMBER_IN_GRID = 9
@@ -158,7 +144,9 @@ export const SequenceMain = ({dayString}) => {
         transition={Flip}
         autoClose={false}
       />
+      <HowtoButton onClick={handlesInfoClick}><InfoIconB></InfoIconB></HowtoButton>
       {gameOver && <div>Today's score - <strong>{score}</strong></div>}
+
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
           <Square  disabled={score === 0 || gameOver} key={index} hightlight={index === highlighedSquare} 
@@ -168,7 +156,7 @@ export const SequenceMain = ({dayString}) => {
       </Grid>
       <ButtonContainer>
       {score === 0 && <Button disabled={gameOver} onClick={handleStartGame}>Start Game</Button>}
-      <Button onClick={handlesInfoClick}>How to Play</Button>
+        
       </ButtonContainer>
     </Container>
   )

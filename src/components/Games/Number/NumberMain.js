@@ -9,7 +9,7 @@ import { saveResults, loadAllResults } from '../../../save_local';
 import { Button } from '../../GlobalStyles';
 import { strings } from '../../../strings';
 import { Link } from 'react-router-dom';
-import { HelpOutline } from '@mui/icons-material';
+import InfoIcon from '@mui/icons-material/Info';
 
 
 const BigContainer = styled.div`
@@ -91,48 +91,33 @@ const Input = styled.input`
   }
 `;
 
-const HelpIcon = styled(HelpOutline)`
+const InfoIconB = styled(InfoIcon)`
   color: black; 
   @media (prefers-color-scheme: dark) {
     color: white;
-  }
+  };
+  font-size: 1.1rem !important;
 `;
 
 const HowtoButton = styled.button`
-border-radius: 8px;
-border-style: solid;
-border-width: 0px;
-padding: 5px;
-text-align: center;
-:active {
-  background-color: darkgray;
-}
-@media (prefers-color-scheme: dark) {
-  color: #DADADA;
-  background-color: #1F2023;  
-
+  border-radius: 8px;
+  border-style: solid;
+  border-width: 0px;
+  padding: 5px;
+  text-align: center;
   :active {
-    background-color: #000;
+    background-color: darkgray;
   }
-}
-`;
-
-const TitleBarDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-items: center;
-`;
-
-const TitleBar = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: auto 1fr;
-  margin-bottom: 1rem;
   @media (prefers-color-scheme: dark) {
-    color: #fff;
+    color: #DADADA;
+    background-color: #1F2023;  
+
+    :active {
+      background-color: #000;
+    }
   }
 `;
+
 
 function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
@@ -152,6 +137,7 @@ export const NumberMain = ({dayString}) => {
     if (storedScore) {
       setGameOver(true);
       toast(strings.tomorrowToast, {autoClose: 2000});
+      return
     }
   }, []);
 
@@ -163,8 +149,17 @@ export const NumberMain = ({dayString}) => {
     if (gameOver) {
       return (
         <>
+        <ButtonContainer>
+          <Link to="/" style={{textDecoration: "none"}}>
+            <Button> Home </Button>
+          </Link>
+          <NumButton onClick={handleinfoClick}><InfoIconB></InfoIconB></NumButton  >
+          <Link to="/word" style={{textDecoration: "none"}}>
+            <Button> To Verbal memory</Button>
+          </Link>
+        </ButtonContainer>
           <div>Today's score - <strong>{score}</strong></div>
-          <Button onClick={handleinfoClick}>{"How to Play"}</Button>
+          
         </>
       )
     }
