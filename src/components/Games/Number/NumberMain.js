@@ -1,15 +1,16 @@
-import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { DateTime } from 'luxon';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { saveResults } from '../../../save_local';
+import { saveResults, loadAllResults } from '../../../save_local';
+import { Button } from '../../GlobalStyles';
+import { strings } from '../../../strings';
 import { Link } from 'react-router-dom';
 import { HelpOutline } from '@mui/icons-material';
-import { Button } from '@mui/material';
+
 
 const BigContainer = styled.div`
   display: flex;
@@ -19,6 +20,7 @@ const BigContainer = styled.div`
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 `;
 
 const NumberTile = styled.div`
@@ -140,16 +142,68 @@ function randomNumberInRange(min, max) {
 const NUM_SHOW_DURATION = 5000;
 export const NumberMain = ({dayString}) => {
   const [num, setNum] = useState(randomNumberInRange(0,9));
-  const [score, setScore] = useState(0);
+  const storedScore = useMemo(() => loadAllResults()[dayString]?.number, [dayString]);
+  const [score, setScore] = useState(storedScore ?? 0);
   const [guess, setGuess] = useState('');
   const [showNum, setShowNum] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
+  useEffect(() => {
+    if (storedScore) {
+      setGameOver(true);
+      toast(strings.tomorrowToast, {autoClose: 2000});
+    }
+  }, []);
 
   const handleinfoClick = (e) => {
-    toast("A number will appear on the screen for 5 seconds, once the 5 seconds runs out, enter the number into the guess box. Each correct round will add 1 additonal digit to the end. If you guess wrong once, game over!", { autoClose: 10000 })
+    toast(strings.howTo.number, { autoClose: 10000 })
  }
 
- 
+  const render = () => {
+    if (gameOver) {
+      return (
+        <>
+          <div>Today's score - <strong>{score}</strong></div>
+          <Button onClick={handleinfoClick}>{"How to Play"}</Button>
+        </>
+      )
+    }
+    if (score === 0) {
+      return (
+        <ButtonContainer>
+          <Button onClick={handleClick}>{"Start"}</Button>
+          <Button onClick={handleinfoClick}>{"How to Play"}</Button>
+        </ButtonContainer>
+      );
+    }
+    if (showNum) {
+      return (
+        <NumberTile>
+          <TargetNumber>{num}</TargetNumber>
+          <CountdownCircleTimer
+            isPlaying
+            duration={NUM_SHOW_DURATION / 1000}
+            colors={["#FC8B9D"]}
+            size={60}
+          >
+          </CountdownCircleTimer>
+        </NumberTile>
+      );
+    } else {
+      return (
+        <NumberTile>
+          <Input type="number"
+            disabled={gameOver}
+            placeholder="enter your guess"
+            onChange={handleInput}
+            value={guess}
+            onKeyDown={handleEnter}
+            autoFocus />
+          <Button disabled={gameOver} onClick={handleClick}>{"Guess"}</Button>
+        </NumberTile>
+      );
+    }
+  };
 
   const handleClick = (e) => {
     if (score === 0) {
@@ -171,9 +225,9 @@ export const NumberMain = ({dayString}) => {
       }, NUM_SHOW_DURATION);
 
     } else {
-      toast("Incorrect!, you got to level " + score, { autoClose: 5000 });
+      toast(strings.endToast(score), { autoClose: 5000 });
       saveResults(dayString, "number", score);
-      setScore(1)
+      setGameOver(true);
     }
     setGuess("");
   };
@@ -197,45 +251,7 @@ export const NumberMain = ({dayString}) => {
         transition={Flip}
         autoClose={true}
       />
-        <ButtonContainer>
-          <Link to="/" style={{textDecoration: "none"}}>
-            <NumButton> Home </NumButton>
-          </Link>
-          <Link to="/word" style={{textDecoration: "none"}}>
-            <NumButton>Verbal Memory</NumButton>
-          </Link>
-          <HowtoButton><HelpIcon onClick={handleinfoClick}></HelpIcon></HowtoButton>
-        </ButtonContainer>
-      {
-        score === 0 ? 
-        <ButtonContainer>
-          <NumButton onClick={handleClick}>{"Start"}</NumButton>
-        </ButtonContainer>
-      
-        :
-        showNum ? 
-          <NumberTile>
-              <TargetNumber>{num}</TargetNumber>
-              <CountdownCircleTimer
-                isPlaying
-                duration={NUM_SHOW_DURATION/1000}
-                colors={["#FC8B9D"]}
-                size={60}
-              >
-              </CountdownCircleTimer>
-          </NumberTile>
-        :
-          <NumberTile>
-          <Input type="number" 
-                disabled={showNum} 
-                placeholder="enter your guess" 
-                onChange={handleInput} 
-                value={guess} 
-                onKeyDown={handleEnter} 
-                autoFocus/>
-          <NumButton onClick={handleClick}>{"Guess"}</NumButton>
-          </NumberTile>
-      }
+      { render() }
     </BigContainer>
   );
 };

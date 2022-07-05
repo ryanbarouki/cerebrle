@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { TimeSeriesGraph } from "./TimeSeriesGraph";
 import { Histogram } from "./Histogram";
 import { Link } from "react-router-dom";
+import { DateTime } from "luxon";
 
 const Container = styled.div`
 	display: flex;
@@ -33,24 +34,30 @@ const Button = styled.button`
   }
 `;
 
-const BIN_SIZE = 10;
+const Title = styled.div`
+  font-size: 2rem;
+  text-align: center;
+`;
+
+const capitalise = ([first, ...rest]) => first.toUpperCase() + rest.join("");
+
 export const StatsView = ({game}) => {
 	const { results, 
-        maxScores,
-        gamesPlayed,
-        distributions } = getStatsData(BIN_SIZE);
-  let name = {sequence: "Sequence",
-              number: "Number",
-              word: "Verbal"};
+        maxScore,
+        distribution,
+        played,
+        streak } = getStatsData()[game];
 
   return (
     <Container>
       {
-        results[game].length !== 0 ?
+        results.length !== 0 ?
           <>
-            <div>{name[game]} Memory Scores</div>
-            <TimeSeriesGraph data={results[game]} />
-            <Histogram data={distributions[game]} />
+            <Title>{capitalise(game)} Memory Scores</Title>
+            <div>Max Score - <strong>{maxScore}</strong> | Days Played - <strong>{played}</strong></div>
+            <div>Playing Streak - <strong>{streak}</strong></div>
+            <TimeSeriesGraph data={results.map(({date, score}) => ({date: DateTime.fromFormat(date, "yyyy-MM-dd").toLocaleString(DateTime.DATE_FULL), score: score}))} />
+            <Histogram data={distribution} />
           </> :
           <>
             <div>No stats yet!</div>
