@@ -73,6 +73,7 @@ const HowtoButton = styled.button`
   border-style: solid;
   border-width: 0px;
   padding: 5px;
+  text-align: center;
   :active {
     background-color: darkgray;
   }
@@ -84,14 +85,11 @@ const HowtoButton = styled.button`
       background-color: #000;
     }
   }
-
 `;
-
 
 const TitleBarDiv = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
 `;
 
 const TitleBar = styled.div`

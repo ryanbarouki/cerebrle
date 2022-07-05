@@ -42,27 +42,28 @@ const TargetNumber = styled.div`
 `;
 
 const NumButton = styled.button`
-  border-radius: 8px;
-  border-width: 0px;
-  padding: 1rem 2rem;
-  :active {
-    background-color: darkgray;
-  }
-  font-size: 1rem;
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
+border-radius: 8px;
+border-style: solid;
+border-width: 0px;
+padding: 10px;
+:active {
+  background-color: darkgray;
+}
+@media (prefers-color-scheme: dark) {
+  color: #DADADA;
+  background-color: #1F2023;  
 
-    :active {
-      background-color: #000;
-    }
+  :active {
+    background-color: #000;
   }
+}
 `;
 
 const ButtonContainer = styled.div`
 display: flex; 
 gap: 5px;;
 margin: 5px;
+align-items: center;
 `;
 
 const Input = styled.input`
@@ -95,10 +96,30 @@ const HelpIcon = styled(HelpOutline)`
   }
 `;
 
+const HowtoButton = styled.button`
+border-radius: 8px;
+border-style: solid;
+border-width: 0px;
+padding: 5px;
+text-align: center;
+:active {
+  background-color: darkgray;
+}
+@media (prefers-color-scheme: dark) {
+  color: #DADADA;
+  background-color: #1F2023;  
+
+  :active {
+    background-color: #000;
+  }
+}
+`;
+
 const TitleBarDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  align-items: center;
 `;
 
 const TitleBar = styled.div`
@@ -176,30 +197,21 @@ export const NumberMain = ({dayString}) => {
         transition={Flip}
         autoClose={true}
       />
-        <TitleBar>
-          <TitleBarDiv>
-            <Button><HelpIcon onClick={handleinfoClick}></HelpIcon></Button>
-            
-          </TitleBarDiv>
-            
-
-        </TitleBar>
-      <ButtonContainer>
-      <Link to="/" style={{textDecoration: "none"}}>
-                <NumButton> Home </NumButton>
-            </Link>
-            <Link to="/word" style={{textDecoration: "none"}}>
-                <NumButton>Verbal Memory</NumButton>
-            </Link>
-      </ButtonContainer>
-
+        <ButtonContainer>
+          <Link to="/" style={{textDecoration: "none"}}>
+            <NumButton> Home </NumButton>
+          </Link>
+          <Link to="/word" style={{textDecoration: "none"}}>
+            <NumButton>Verbal Memory</NumButton>
+          </Link>
+          <HowtoButton><HelpIcon onClick={handleinfoClick}></HelpIcon></HowtoButton>
+        </ButtonContainer>
       {
         score === 0 ? 
-        
         <ButtonContainer>
           <NumButton onClick={handleClick}>{"Start"}</NumButton>
         </ButtonContainer>
-    
+      
         :
         showNum ? 
           <NumberTile>
