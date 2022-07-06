@@ -8,6 +8,7 @@ import { saveResults, loadAllResults } from "../../../save_local";
 import { Button } from "../../GlobalStyles";
 import { strings } from "../../../strings";
 import { Link } from 'react-router-dom';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Container = styled.div`
   display: flex;
@@ -36,6 +37,32 @@ const Score = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   gap: 5px;
+`;
+
+const InfoIconB = styled(InfoIcon)`
+  color: black; 
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  };
+  font-size: 1.1rem !important;
+`;
+
+const NumButton = styled.button`
+border-radius: 8px;
+border-style: solid;
+border-width: 0px;
+padding: 10px;
+:active {
+  background-color: darkgray;
+}
+@media (prefers-color-scheme: dark) {
+  color: #DADADA;
+  background-color: #1F2023;  
+
+  :active {
+    background-color: #000;
+  }
+}
 `;
 
 const NUMBER_OF_LIVES = 3;
@@ -104,6 +131,7 @@ export const WordMain = ({dayString}) => {
         <Link to="/" style={{textDecoration: "none"}}>
         <Button> Home </Button>
       </Link>
+      <NumButton onClick={handleWInfoClick}><InfoIconB></InfoIconB></NumButton  >
       <Link to="/stats" style={{textDecoration: "none"}}>
           <Button> To Statistics</Button>
       </Link>
@@ -118,7 +146,7 @@ export const WordMain = ({dayString}) => {
             <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
           </RowContainer>
         }
-      <Button onClick={handleWInfoClick}>How to Play</Button>
+      
     </Container>
   )
 }

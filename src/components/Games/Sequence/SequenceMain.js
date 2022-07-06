@@ -144,8 +144,17 @@ export const SequenceMain = ({dayString}) => {
         transition={Flip}
         autoClose={false}
       />
-      <HowtoButton onClick={handlesInfoClick}><InfoIconB></InfoIconB></HowtoButton>
+        <ButtonContainer>
+          <Link to="/" style={{textDecoration: "none"}}>
+            <Button> Home </Button>
+          </Link>
+            <HowtoButton onClick={handlesInfoClick}><InfoIconB></InfoIconB></HowtoButton>
+          <Link to="/word" style={{textDecoration: "none"}}>
+            <Button> To Verbal memory</Button>
+          </Link>
+        </ButtonContainer>
       {gameOver && <div>Today's score - <strong>{score}</strong></div>}
+
 
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
