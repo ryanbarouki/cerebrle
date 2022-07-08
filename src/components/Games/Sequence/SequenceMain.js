@@ -4,11 +4,12 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults, loadAllResults } from "../../../save_local";
-import { Button } from "../../GlobalStyles";
+import { Button, HowToButton, ButtonContainer } from "../../GlobalStyles";
 import { css } from "styled-components";
 import { strings } from "../../../strings";
 import { Link } from 'react-router-dom';
 import InfoIcon from '@mui/icons-material/Info';
+import { Share } from "../../Share";
 
 const Grid = styled.div`
   display: grid;
@@ -39,11 +40,6 @@ const Square = styled.div`
   `}
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
 const InfoIconB = styled(InfoIcon)`
   color: black; 
   @media (prefers-color-scheme: dark) {
@@ -52,28 +48,8 @@ const InfoIconB = styled(InfoIcon)`
   font-size: 1.1rem !important;
 `;
 
-const HowtoButton = styled.button`
-  border-radius: 8px;
-  border-style: solid;
-  border-width: 0px;
-  padding: 5px;
-  text-align: center;
-  :active {
-    background-color: darkgray;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-
-    :active {
-      background-color: #000;
-    }
-  }
-`;
-
-
-
 const NUMBER_IN_GRID = 9
+const HIGHLIGHT_TIME = 500;
 export const SequenceMain = ({dayString}) => {
   const [sequence, setSequence] = useState([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
   const [inputSequence, setInputSequence] = useState([]);
@@ -99,7 +75,7 @@ export const SequenceMain = ({dayString}) => {
       }
       setHighlightedSquare(sequence[i])
       i++;
-    }, 500);
+    }, HIGHLIGHT_TIME);
   }, [score]);
 
   useEffect(() => {
@@ -144,18 +120,17 @@ export const SequenceMain = ({dayString}) => {
         transition={Flip}
         autoClose={false}
       />
+        {gameOver && <div>Today's score - <strong>{score}</strong></div>}
         <ButtonContainer>
-          <Link to="/" style={{textDecoration: "none"}}>
-            <Button> Home </Button>
-          </Link>
-            <HowtoButton onClick={handlesInfoClick}><InfoIconB></InfoIconB></HowtoButton>
-          <Link to="/word" style={{textDecoration: "none"}}>
-            <Button> To Verbal memory</Button>
-          </Link>
+            <HowToButton onClick={handlesInfoClick}><InfoIconB /></HowToButton>
+          {gameOver && 
+          <>
+            <Link to="/number" style={{textDecoration: "none"}}>
+              <Button>Play Number Memory</Button>
+            </Link>
+          </>
+          }
         </ButtonContainer>
-      {gameOver && <div>Today's score - <strong>{score}</strong></div>}
-
-
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
           <Square  disabled={score === 0 || gameOver} key={index} hightlight={index === highlighedSquare} 
@@ -165,7 +140,7 @@ export const SequenceMain = ({dayString}) => {
       </Grid>
       <ButtonContainer>
       {score === 0 && <Button disabled={gameOver} onClick={handleStartGame}>Start Game</Button>}
-        
+      {gameOver && <Share dayString={dayString}/>} 
       </ButtonContainer>
     </Container>
   )

@@ -1,16 +1,15 @@
 import styled from 'styled-components';
-import { DateTime } from 'luxon';
 import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { ToastContainer, Flip } from "react-toastify";
 import { toast } from 'react-toastify';
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { saveResults, loadAllResults } from '../../../save_local';
-import { Button } from '../../GlobalStyles';
+import { Button, HowToButton, ButtonContainer } from '../../GlobalStyles';
 import { strings } from '../../../strings';
 import { Link } from 'react-router-dom';
 import InfoIcon from '@mui/icons-material/Info';
-
+import { Share } from '../../Share';
 
 const BigContainer = styled.div`
   display: flex;
@@ -41,31 +40,6 @@ const TargetNumber = styled.div`
   text-align: center;
   width: 100%;
   word-wrap: break-word;
-`;
-
-const NumButton = styled.button`
-border-radius: 8px;
-border-style: solid;
-border-width: 0px;
-padding: 10px;
-:active {
-  background-color: darkgray;
-}
-@media (prefers-color-scheme: dark) {
-  color: #DADADA;
-  background-color: #1F2023;  
-
-  :active {
-    background-color: #000;
-  }
-}
-`;
-
-const ButtonContainer = styled.div`
-display: flex; 
-gap: 5px;;
-margin: 5px;
-align-items: center;
 `;
 
 const Input = styled.input`
@@ -99,26 +73,6 @@ const InfoIconB = styled(InfoIcon)`
   font-size: 1.1rem !important;
 `;
 
-const HowtoButton = styled.button`
-  border-radius: 8px;
-  border-style: solid;
-  border-width: 0px;
-  padding: 5px;
-  text-align: center;
-  :active {
-    background-color: darkgray;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-
-    :active {
-      background-color: #000;
-    }
-  }
-`;
-
-
 function randomNumberInRange(min, max) {
     return String(Math.floor(Math.random() * (max - min +1)) + min);
   };
@@ -149,25 +103,22 @@ export const NumberMain = ({dayString}) => {
     if (gameOver) {
       return (
         <>
+        <div>Today's score - <strong>{score}</strong></div>
         <ButtonContainer>
-          <Link to="/" style={{textDecoration: "none"}}>
-            <Button> Home </Button>
-          </Link>
-          <NumButton onClick={handleinfoClick}><InfoIconB></InfoIconB></NumButton  >
+          <HowToButton onClick={handleinfoClick}><InfoIconB></InfoIconB></HowToButton  >
           <Link to="/word" style={{textDecoration: "none"}}>
-            <Button> To Verbal memory</Button>
+            <Button>Play Verbal Memory</Button>
           </Link>
         </ButtonContainer>
-          <div>Today's score - <strong>{score}</strong></div>
-          
+        <Share dayString={dayString}/>
         </>
       )
     }
     if (score === 0) {
       return (
         <ButtonContainer>
-          <Button onClick={handleClick}>{"Start"}</Button>
-          <Button onClick={handleinfoClick}>{"How to Play"}</Button>
+          <HowToButton onClick={handleinfoClick}><InfoIconB /></HowToButton>
+          <Button onClick={handleClick}>{"Start Number Memory"}</Button>
         </ButtonContainer>
       );
     }
@@ -220,7 +171,7 @@ export const NumberMain = ({dayString}) => {
       }, NUM_SHOW_DURATION);
 
     } else {
-      toast(strings.endToast(score), { autoClose: 5000 });
+      toast(strings.endToast(score), { autoClose: 2000 });
       saveResults(dayString, "number", score);
       setGameOver(true);
     }
@@ -250,10 +201,3 @@ export const NumberMain = ({dayString}) => {
     </BigContainer>
   );
 };
-
-
-const getDayString = () => {
-  return DateTime.now().toFormat("yyyy-MM-dd");
-};
-
-
