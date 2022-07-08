@@ -9,7 +9,18 @@ const FIRST_DAY_OF_CEREBRLE = DateTime.fromFormat('July 07 2022', 'LLLL dd yyyy'
 
 
 const getShareString = ({number: numberScore, sequence: sequenceScore, word: wordScore}) => {
-  return `🟩 Sequence Memory: ${sequenceScore}\n🔢 Number Memory: ${numberScore}\n📖 Verbal Memory: ${wordScore}\n`;
+  let shareString = "";
+  if (sequenceScore) {
+    shareString += `🟩 Sequence Memory: ${sequenceScore}\n`;
+  }
+  if (numberScore) {
+    shareString += `🔢 Number Memory: ${numberScore}\n`;
+  }
+  if (wordScore) {
+    shareString += `📖 Verbal Memory: ${wordScore}\n`;
+  }
+
+  return shareString;
 }
 
 export function Share({ dayString }) {
@@ -17,7 +28,7 @@ export function Share({ dayString }) {
     const results = loadAllResults();
     const currentDate = DateTime.fromFormat(dayString, "yyyy-MM-dd");
     const diffInDays = currentDate.diff(FIRST_DAY_OF_CEREBRLE, 'days').toObject().days;
-    const shareString = `#Cerebrle #${diffInDays}\n${getShareString(results[dayString])}https://www.cerebrle.io`;
+    const shareString = `#Cerebrle #${diffInDays}\n${getShareString(results[dayString] ?? {})}https://www.cerebrle.io`;
     return shareString
   }, []);
 

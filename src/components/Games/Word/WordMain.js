@@ -50,9 +50,11 @@ export const WordMain = ({dayString}) => {
   const [seenWords, setSeenWords] = useState([]);
   const [currentWord, setCurrentWord] = useState(randomWords());
   const [isNewWord, setIsNewWord] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (storedScore) {
+      setGameOver(true);
       setLives(0);
       toast(strings.tomorrowToast, {autoClose: 2000});
     }
@@ -67,6 +69,7 @@ export const WordMain = ({dayString}) => {
     if (lives === 0) {
       toast(strings.endToast(score), {autoClose: 2000});
       saveResults(dayString, "word", score);
+      setGameOver(true);
     }
   }, [lives]);
 
@@ -108,21 +111,21 @@ export const WordMain = ({dayString}) => {
         <Score>{`Lives: ${lives} | Score: ${score}`}</Score>
       </RowContainer>
       <Word>{currentWord}</Word>
-        {lives !== 0 &&
+        {!gameOver &&
           <RowContainer>
-            <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
-            <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
+            <Button disabled={gameOver} onClick={() => handleChoice(false)}>Seen</Button>
+            <Button disabled={gameOver} onClick={() => handleChoice(true)}>New</Button>
           </RowContainer>
         }
       <ButtonContainer>
         <HowToButton onClick={handleWInfoClick}><InfoIconB></InfoIconB></HowToButton  >
-        {lives === 0 && 
+        {gameOver && 
           <Link to="/sequence" style={{textDecoration: "none"}}>
             <Button>Play Sequence Memory</Button>
           </Link>
         }
       </ButtonContainer>
-      {lives === 0 && <Share dayString={dayString} /> }
+      {gameOver && <Share dayString={dayString} /> }
     </Container>
   )
 }
