@@ -1,4 +1,4 @@
-import { NavLink, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { SequenceMain } from './Games/Sequence/SequenceMain';
 import { NumberMain } from './Games/Number/NumberMain';
 import { WordMain } from './Games/Word/WordMain';

@@ -10,6 +10,7 @@ export const Button = styled.button`
   :active {
     background-color: darkgray;
   }
+
   @media (prefers-color-scheme: dark) {
     color: #DADADA;
     background-color: #1F2023;  
@@ -18,4 +19,13 @@ export const Button = styled.button`
       background-color: #000;
     }
   }
+`;
+
+export const HowToButton = styled(Button)`
+  padding: 5px;
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 5px;
 `;

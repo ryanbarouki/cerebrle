@@ -5,8 +5,11 @@ import { ToastContainer, Flip } from "react-toastify";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { saveResults, loadAllResults } from "../../../save_local";
-import { Button } from "../../GlobalStyles";
+import { Button, HowToButton, ButtonContainer } from "../../GlobalStyles";
 import { strings } from "../../../strings";
+import { Link } from 'react-router-dom';
+import InfoIcon from '@mui/icons-material/Info';
+import { Share } from "../../Share";
 
 const Container = styled.div`
   display: flex;
@@ -31,6 +34,14 @@ const Score = styled.div`
   font-size: 1.2rem;
 `;
 
+const InfoIconB = styled(InfoIcon)`
+  color: black; 
+  @media (prefers-color-scheme: dark) {
+    color: white;
+  };
+  font-size: 1.1rem !important;
+`;
+
 const NUMBER_OF_LIVES = 3;
 export const WordMain = ({dayString}) => {
   const storedScore = useMemo(() => (loadAllResults()[dayString]?.word), [dayString]);
@@ -39,9 +50,11 @@ export const WordMain = ({dayString}) => {
   const [seenWords, setSeenWords] = useState([]);
   const [currentWord, setCurrentWord] = useState(randomWords());
   const [isNewWord, setIsNewWord] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (storedScore) {
+      setGameOver(true);
       setLives(0);
       toast(strings.tomorrowToast, {autoClose: 2000});
     }
@@ -56,6 +69,7 @@ export const WordMain = ({dayString}) => {
     if (lives === 0) {
       toast(strings.endToast(score), {autoClose: 2000});
       saveResults(dayString, "word", score);
+      setGameOver(true);
     }
   }, [lives]);
 
@@ -97,13 +111,21 @@ export const WordMain = ({dayString}) => {
         <Score>{`Lives: ${lives} | Score: ${score}`}</Score>
       </RowContainer>
       <Word>{currentWord}</Word>
-        {lives !== 0 &&
+        {!gameOver &&
           <RowContainer>
-            <Button disabled={lives === 0} onClick={() => handleChoice(false)}>Seen</Button>
-            <Button disabled={lives === 0} onClick={() => handleChoice(true)}>New</Button>
+            <Button disabled={gameOver} onClick={() => handleChoice(false)}>Seen</Button>
+            <Button disabled={gameOver} onClick={() => handleChoice(true)}>New</Button>
           </RowContainer>
         }
-      <Button onClick={handleWInfoClick}>How to Play</Button>
+      <ButtonContainer>
+        <HowToButton onClick={handleWInfoClick}><InfoIconB></InfoIconB></HowToButton  >
+        {gameOver && 
+          <Link to="/sequence" style={{textDecoration: "none"}}>
+            <Button>Play Sequence Memory</Button>
+          </Link>
+        }
+      </ButtonContainer>
+      {gameOver && <Share dayString={dayString} /> }
     </Container>
   )
 }
