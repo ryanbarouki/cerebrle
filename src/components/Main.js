@@ -7,6 +7,7 @@ import { StatsView } from './Stats/StatsView';
 import { StatsMain } from './Stats/StatsMain';
 import { useMemo } from 'react';
 import { DateTime } from 'luxon';
+import { Info } from './Info';
 
 const getDayString = () => {
   return DateTime.now().toFormat("yyyy-MM-dd");
@@ -24,6 +25,7 @@ export const Main = () => {
       <Route exact path='/stats/sequence' element={<StatsView game={"sequence"}/>}></Route>
       <Route exact path='/stats/number' element={<StatsView game={"number"}/>}></Route>
       <Route exact path='/stats/word' element={<StatsView game={"word"}/>}></Route>
+      <Route exact path='/info' element={<Info />}></Route>
     </Routes>
   );
 }
