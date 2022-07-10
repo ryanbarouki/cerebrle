@@ -4,6 +4,7 @@ import cerebrleLogo from './cerebrle_logo.svg';
 import { Link } from 'react-router-dom';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import HomeIcon from '@mui/icons-material/Home';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Container = styled.div`
   display: flex;
@@ -31,6 +32,10 @@ const Stats = styled(LeaderboardIcon)`
   ${IconStyle}
 `;
 
+const Info = styled(InfoIcon)`
+  ${IconStyle}
+`;
+
 const IconContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -50,6 +55,9 @@ function App() {
         </Link>
         <Link to="/stats" style={{ textDecoration: "none" }}>
           <Stats />
+        </Link>
+        <Link to="/info" style={{ textDecoration: "none" }}>
+          <Info />
         </Link>
       </IconContainer>
       {/* Navigation bar can go here */}
