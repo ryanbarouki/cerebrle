@@ -1,5 +1,4 @@
 
-import seedrandom from 'seedrandom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import sequenceIcon from '../../icons/sequence_icon.svg'
@@ -28,8 +27,7 @@ const Card = styled.div`
   align-items: center;
   gap: 1rem;
   border-radius: 5px;
-  background-color: lightgray;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  background-color: #EFEFEF;
   transition: 0.3s;
   color: black;
   width: 11rem;
