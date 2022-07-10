@@ -8,6 +8,7 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   max-width: 500px;
+  margin: 0 1rem;
 `;
 
 const IconStyle = css`
