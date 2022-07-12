@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
+import { AdContainer } from './components/GlobalStyles';
+import GoogleAd from './components/GoogleAd';
 
 const Container = styled.div`
   display: flex;
@@ -62,6 +64,9 @@ function App() {
       </IconContainer>
       {/* Navigation bar can go here */}
       <Main></Main>
+      <AdContainer>
+        <GoogleAd slot="4517132145"/>
+      </AdContainer>
     </Container>
   );
 }
