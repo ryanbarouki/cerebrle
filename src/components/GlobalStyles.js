@@ -32,10 +32,9 @@ export const ButtonContainer = styled.div`
 
 export const AdContainer = styled.div`
   width: 100%;
-  margin-top: auto;
-  bottom: 0px;
   display: flex;
   justify-content: center;
   padding: 1rem 0;
+  flex-shrink: 0;
 `;
 
