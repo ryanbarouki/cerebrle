@@ -29,3 +29,12 @@ export const ButtonContainer = styled.div`
   display: flex;
   gap: 5px;
 `;
+
+export const AdContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  flex-shrink: 0;
+`;
+

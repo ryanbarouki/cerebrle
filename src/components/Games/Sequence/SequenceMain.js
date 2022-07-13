@@ -57,6 +57,7 @@ export const SequenceMain = ({dayString}) => {
   const [score, setScore] = useState(storedScore ?? 0);
   const [highlighedSquare, setHighlightedSquare] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+  const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
     if (storedScore) {
@@ -68,10 +69,12 @@ export const SequenceMain = ({dayString}) => {
   useEffect(() => {
     if (score === 0 || gameOver || storedScore) return;
     let i = 0;
+    setAnimating(true);
     const interval = setInterval(() => {
       if (i === sequence.length) {
         clearInterval(interval);
         setHighlightedSquare(null);
+        setAnimating(false);
       }
       setHighlightedSquare(sequence[i])
       i++;
@@ -100,7 +103,7 @@ export const SequenceMain = ({dayString}) => {
   }, [inputSequence]);
 
   const handleClick = (index) => {
-    if (gameOver || score === 0) return;
+    if (gameOver || score === 0 || animating) return;
     setInputSequence(sequence => [...sequence, index]);
   };
 
@@ -133,7 +136,7 @@ export const SequenceMain = ({dayString}) => {
         </ButtonContainer>
       <Grid>
         {Array(NUMBER_IN_GRID).fill().map((val, index) => (
-          <Square  disabled={score === 0 || gameOver} key={index} hightlight={index === highlighedSquare} 
+          <Square  disabled={score === 0 || gameOver || animating} key={index} hightlight={index === highlighedSquare} 
                   onClick={() => handleClick(index)}
           ></Square>
         ))}

@@ -5,12 +5,15 @@ import { Link } from 'react-router-dom';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
+import { AdContainer } from './components/GlobalStyles';
+import GoogleAd from './components/GoogleAd';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  flex: 1 0 auto;
 `;
 
 const Logo = styled.img`
@@ -45,6 +48,7 @@ const IconContainer = styled.div`
 function App() {
 
   return (
+    <>
     <Container>
       <Link to="/" style={{ textDecoration: "none" }}>
         <Logo src={cerebrleLogo} alt="logo" />
@@ -60,9 +64,12 @@ function App() {
           <Info />
         </Link>
       </IconContainer>
-      {/* Navigation bar can go here */}
       <Main></Main>
     </Container>
+    <AdContainer>
+      <GoogleAd slot="4517132145"/>
+    </AdContainer>
+    </>
   );
 }
 
