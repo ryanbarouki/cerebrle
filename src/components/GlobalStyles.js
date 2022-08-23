@@ -33,6 +33,9 @@ export const ButtonContainer = styled.div`
 export const AdContainer = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   justify-content: center;
   padding: 1rem 0;
   flex-shrink: 0;

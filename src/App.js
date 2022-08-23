@@ -67,6 +67,7 @@ function App() {
       <Main></Main>
     </Container>
     <AdContainer>
+      <a class="nn-cmp-show" href="#">Manage Cookie Settings</a>
       <AdSpace />
     </AdContainer>
     </>
