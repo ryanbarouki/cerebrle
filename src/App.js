@@ -6,7 +6,7 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import { AdContainer } from './components/GlobalStyles';
-import GoogleAd from './components/GoogleAd';
+import AdSpace from './components/AdSpace';
 
 const Container = styled.div`
   display: flex;
@@ -67,7 +67,7 @@ function App() {
       <Main></Main>
     </Container>
     <AdContainer>
-      <GoogleAd slot="4517132145"/>
+      <AdSpace />
     </AdContainer>
     </>
   );
