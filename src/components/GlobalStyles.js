@@ -1,43 +1,35 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Button = styled.button`
-  border-radius: 8px;
-  border-style: solid;
-  border-width: 0px;
-  padding: 12px;
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.65rem 1.15rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
 
-  :active {
-    background-color: darkgray;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-
-    :active {
-      background-color: #000;
-    }
-  }
+  &:hover:not(:disabled) { background: var(--primary-hover); }
+  &:disabled { opacity: 0.55; cursor: default; }
 `;
 
-export const HowToButton = styled(Button)`
-  padding: 5px;
+export const SecondaryButton = styled(Button)`
+  gap: 0.4rem;
+  border-color: var(--border);
+  background: var(--surface);
+  color: var(--ink);
+
+  &:hover:not(:disabled) { background: var(--background); }
 `;
 
 export const ButtonContainer = styled.div`
   display: flex;
-  gap: 5px;
-`;
-
-export const AdContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
   justify-content: center;
-  padding: 1rem 0;
-  flex-shrink: 0;
+  gap: 0.6rem;
 `;
-

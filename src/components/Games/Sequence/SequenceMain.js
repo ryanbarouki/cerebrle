@@ -1,150 +1,127 @@
-import styled from "styled-components"
-import { useEffect, useState, useMemo } from "react";
-import { ToastContainer, Flip } from "react-toastify";
-import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import { saveResults, loadAllResults } from "../../../save_local";
-import { Button, HowToButton, ButtonContainer } from "../../GlobalStyles";
-import { css } from "styled-components";
-import { strings } from "../../../strings";
-import { Link } from 'react-router-dom';
-import InfoIcon from '@mui/icons-material/Info';
-import { Share } from "../../Share";
+import styled from 'styled-components';
+import { useEffect, useRef, useState } from 'react';
+import { saveResults, loadAllResults } from '../../../save_local';
+import { Button } from '../../GlobalStyles';
+import { GameLayout } from '../GameLayout';
+import { GameResult } from '../GameResult';
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 5rem);
-  gap: 10px;
-  justify-content: center;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 18rem);
+  gap: 0.55rem;
 `;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align:center;
-  gap: 1rem;
+const Square = styled.button`
+  aspect-ratio: 1;
+  border: 1px solid #6898b2;
+  padding: 0;
+  background: var(--game-tint);
+  border-radius: 12px;
+
+  &:not([aria-disabled="true"]) { cursor: pointer; }
+  &:hover:not([aria-disabled="true"]) { background: #bfe7f8; }
+
+  &[data-lit="true"], &:active:not([aria-disabled="true"]) {
+    background: var(--brand-pink);
+    box-shadow: inset 0 0 0 3px #8d3153;
+  }
 `;
 
-const Square = styled.div`
-  transition: 0.2s;
-  padding: 30px;
-  aspect-ratio: 1/1;
-  background-color: ${props => props.hightlight ? "#fba8b5" : "#45acd8"};
-  border-radius: 3px;
-  ${({disabled}) => !disabled && css`
-    :active {
-      background-color: #fba8b5;
-    }
-  `}
-`;
-
-const InfoIconB = styled(InfoIcon)`
-  color: black; 
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  };
-  font-size: 1.1rem !important;
-`;
-
-const NUMBER_IN_GRID = 9
+const TILE_COUNT = 9;
 const HIGHLIGHT_TIME = 500;
-export const SequenceMain = ({dayString}) => {
-  const [sequence, setSequence] = useState([Math.floor(Math.random()*(NUMBER_IN_GRID-1))]);
-  const [inputSequence, setInputSequence] = useState([]);
-  const storedScore = useMemo(() => (loadAllResults()[dayString]?.sequence), [dayString]);
-  const [score, setScore] = useState(storedScore ?? 0);
-  const [highlighedSquare, setHighlightedSquare] = useState(null);
-  const [gameOver, setGameOver] = useState(false);
-  const [animating, setAnimating] = useState(false);
+const TAP_TIME = 180;
+const randomTile = () => Math.floor(Math.random() * TILE_COUNT);
+
+export const SequenceMain = ({ dayString }) => {
+  const [storedScore] = useState(() => loadAllResults()[dayString]?.sequence);
+  const [sequence, setSequence] = useState([]);
+  const [entered, setEntered] = useState(0);
+  const [highlighted, setHighlighted] = useState(null);
+  const [tap, setTap] = useState(null);
+  const [watching, setWatching] = useState(false);
+  const [finished, setFinished] = useState(false);
+  const firstTile = useRef(null);
+  const round = sequence.length;
 
   useEffect(() => {
-    if (storedScore) {
-      setGameOver(true);
-      toast(strings.tomorrowToast, {autoClose: 2000});
-    }
-  }, []);
+    if (!watching) return;
 
-  useEffect(() => {
-    if (score === 0 || gameOver || storedScore) return;
-    let i = 0;
-    setAnimating(true);
-    const interval = setInterval(() => {
-      if (i === sequence.length) {
-        clearInterval(interval);
-        setHighlightedSquare(null);
-        setAnimating(false);
+    let step = 0;
+    const timer = setInterval(() => {
+      if (step === sequence.length) {
+        clearInterval(timer);
+        setHighlighted(null);
+        setWatching(false);
+        return;
       }
-      setHighlightedSquare(sequence[i])
-      i++;
+      setHighlighted(sequence[step]);
+      step++;
     }, HIGHLIGHT_TIME);
-  }, [score]);
+
+    return () => clearInterval(timer);
+  }, [sequence, watching]);
 
   useEffect(() => {
-    if (inputSequence.length === 0) return;
+    if (tap === null) return;
+    const timer = setTimeout(() => setTap(null), TAP_TIME);
+    return () => clearTimeout(timer);
+  }, [tap]);
 
-    if (inputSequence[inputSequence.length-1] !== sequence[inputSequence.length-1]){
-      saveResults(dayString, "sequence", score);
-      setGameOver(true);
-      toast(strings.endToast(score), {autoClose: 2000});
+  useEffect(() => {
+    if (round === 1 && watching) firstTile.current?.focus();
+  }, [round, watching]);
+
+  const handleTile = (index) => {
+    if (round === 0 || watching || finished) return;
+
+    if (index !== sequence[entered]) {
+      saveResults(dayString, 'sequence', round);
+      setFinished(true);
       return;
     }
 
-    if (inputSequence.length === score) {
-      setInputSequence(sequence => []);
-      let nextInSequence = Math.floor(Math.random()*(NUMBER_IN_GRID-1))
-      while (nextInSequence === sequence.at(-1)) {
-        nextInSequence = Math.floor(Math.random()*(NUMBER_IN_GRID-1))
-      }
-      setSequence(sequence => [...sequence, nextInSequence]);
-      setScore(score+1);
+    setTap({ index });
+    if (entered + 1 === round) {
+      const offset = 1 + Math.floor(Math.random() * (TILE_COUNT - 1));
+      setSequence([...sequence, (index + offset) % TILE_COUNT]);
+      setEntered(0);
+      setWatching(true);
+      return;
     }
-  }, [inputSequence]);
-
-  const handleClick = (index) => {
-    if (gameOver || score === 0 || animating) return;
-    setInputSequence(sequence => [...sequence, index]);
-  };
-
-  const handlesInfoClick = (e) => {
-    toast(strings.howTo.sequence, { autoClose: 10000 })
-  }
-
-  const handleStartGame = () => {
-    setScore(1);
+    setEntered(entered + 1);
   };
 
   return (
-    <Container>
-      <ToastContainer
-        hideProgressBar
-        position="top-center"
-        transition={Flip}
-        autoClose={false}
-      />
-        {gameOver && <div>Today's score - <strong>{score}</strong></div>}
-        <ButtonContainer>
-            <HowToButton onClick={handlesInfoClick}><InfoIconB /></HowToButton>
-          {gameOver && 
-          <>
-            <Link to="/number" style={{textDecoration: "none"}}>
-              <Button>Play Number Memory</Button>
-            </Link>
-          </>
-          }
-        </ButtonContainer>
-      <Grid>
-        {Array(NUMBER_IN_GRID).fill().map((val, index) => (
-          <Square  disabled={score === 0 || gameOver || animating} key={index} hightlight={index === highlighedSquare} 
-                  onClick={() => handleClick(index)}
-          ></Square>
-        ))}
-      </Grid>
-      <ButtonContainer>
-      {score === 0 && <Button disabled={gameOver} onClick={handleStartGame}>Start Game</Button>}
-      {gameOver && <Share dayString={dayString}/>} 
-      </ButtonContainer>
-    </Container>
-  )
-}
+    <GameLayout game="sequence">
+      {finished || storedScore != null ? (
+        <GameResult dayString={dayString} score={storedScore ?? round} nextGame="number" />
+      ) : (
+        <>
+          <div className="round-status" role="status">
+            <strong>{round === 0 ? 'Ready to play?' : watching ? 'Watch the tiles' : 'Your turn'}</strong>
+            {round > 0 && <span>Round {round}{!watching && ` · ${entered} of ${round} entered`}</span>}
+          </div>
+          <Grid>
+            {Array.from({ length: TILE_COUNT }, (_, index) => (
+              <Square
+                type="button"
+                key={index}
+                ref={index === 0 ? firstTile : undefined}
+                aria-label={`Tile ${index + 1}`}
+                aria-disabled={watching || undefined}
+                disabled={round === 0}
+                data-lit={index === highlighted || index === tap?.index}
+                onClick={() => handleTile(index)}
+              />
+            ))}
+          </Grid>
+          {round === 0 && <Button onClick={() => {
+            setSequence([randomTile()]);
+            setWatching(true);
+          }}>Start game</Button>}
+        </>
+      )}
+    </GameLayout>
+  );
+};

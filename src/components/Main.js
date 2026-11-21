@@ -17,7 +17,7 @@ export const Main = () => {
   const dayString = useMemo(getDayString, []);
   return (
     <Routes>
-      <Route exact path='/' element={<Home/>}></Route>
+      <Route exact path='/' element={<Home dayString={dayString} />}></Route>
       <Route exact path='/number' element={<NumberMain dayString={dayString}/>}></Route>
       <Route exact path='/sequence' element={<SequenceMain dayString={dayString}/>}></Route>
       <Route exact path='/word' element={<WordMain dayString={dayString}/>}></Route>

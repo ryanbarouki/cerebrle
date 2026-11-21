@@ -1,203 +1,86 @@
-import styled from 'styled-components';
-import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
-import { ToastContainer, Flip } from "react-toastify";
-import { toast } from 'react-toastify';
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { CountdownCircleTimer } from 'react-countdown-circle-timer';
 import { saveResults, loadAllResults } from '../../../save_local';
-import { Button, HowToButton, ButtonContainer } from '../../GlobalStyles';
-import { strings } from '../../../strings';
-import { Link } from 'react-router-dom';
-import InfoIcon from '@mui/icons-material/Info';
-import { Share } from '../../Share';
+import { Button } from '../../GlobalStyles';
+import { GameLayout } from '../GameLayout';
+import { GameResult } from '../GameResult';
 
-const BigContainer = styled.div`
-  display: flex;
-  text-align: center;
-  height: 100%;
-  width: 100%;
-  justify-content: flex-start;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-`;
+const SECONDS_TO_MEMORIZE = 5;
+const randomDigit = () => String(Math.floor(Math.random() * 10));
 
-const NumberTile = styled.div`
-  display: flex;
-  min-width: 10rem;
-  width: 100%;
-  padding: 0;
-  justify-content: center;
-  text-align: center;
-  flex-direction: column;
-  align-items: center;
-`;
-
-
-const TargetNumber = styled.div`
-  color: #45acd8;
-  font-size: 4rem;
-  text-align: center;
-  width: 100%;
-  word-wrap: break-word;
-`;
-
-const Input = styled.input`
-  background-color: whitesmoke;
-  text-align: center;
-  font-size: 1.5rem;
-  padding: 1rem;
-  margin: 0.5rem;
-  width: 12rem;
-  border-radius: 5px;
-  border-width: 0;
-  :focus {
-    outline: none;
-  }
-  @media (prefers-color-scheme: dark) {
-    color: #DADADA;
-    background-color: #1F2023;  
-  }
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-`;
-
-const InfoIconB = styled(InfoIcon)`
-  color: black; 
-  @media (prefers-color-scheme: dark) {
-    color: white;
-  };
-  font-size: 1.1rem !important;
-`;
-
-function randomNumberInRange(min, max) {
-    return String(Math.floor(Math.random() * (max - min +1)) + min);
-  };
-
-
-const NUM_SHOW_DURATION = 5000;
-export const NumberMain = ({dayString}) => {
-  const [num, setNum] = useState(randomNumberInRange(0,9));
-  const storedScore = useMemo(() => loadAllResults()[dayString]?.number, [dayString]);
-  const [score, setScore] = useState(storedScore ?? 0);
+export const NumberMain = ({ dayString }) => {
+  const [storedScore] = useState(() => loadAllResults()[dayString]?.number);
+  const [number, setNumber] = useState('');
   const [guess, setGuess] = useState('');
-  const [showNum, setShowNum] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
+  const [memorizing, setMemorizing] = useState(false);
+  const [finished, setFinished] = useState(false);
 
-  useEffect(() => {
-    if (storedScore) {
-      setGameOver(true);
-      toast(strings.tomorrowToast, {autoClose: 2000});
-      return
-    }
-  }, []);
+  const submitGuess = (event) => {
+    event.preventDefault();
+    if (memorizing || !guess) return;
 
-  const handleinfoClick = (e) => {
-    toast(strings.howTo.number, { autoClose: 10000 })
- }
-
-  const render = () => {
-    if (gameOver) {
-      return (
-        <>
-        <div>Today's score - <strong>{score}</strong></div>
-        <ButtonContainer>
-          <HowToButton onClick={handleinfoClick}><InfoIconB></InfoIconB></HowToButton  >
-          <Link to="/word" style={{textDecoration: "none"}}>
-            <Button>Play Verbal Memory</Button>
-          </Link>
-        </ButtonContainer>
-        <Share dayString={dayString}/>
-        </>
-      )
-    }
-    if (score === 0) {
-      return (
-        <ButtonContainer>
-          <HowToButton onClick={handleinfoClick}><InfoIconB /></HowToButton>
-          <Button onClick={handleClick}>{"Start Number Memory"}</Button>
-        </ButtonContainer>
-      );
-    }
-    if (showNum) {
-      return (
-        <NumberTile>
-          <TargetNumber>{num}</TargetNumber>
-          <CountdownCircleTimer
-            isPlaying
-            duration={NUM_SHOW_DURATION / 1000}
-            colors={["#FC8B9D"]}
-            size={60}
-          >
-          </CountdownCircleTimer>
-        </NumberTile>
-      );
-    } else {
-      return (
-        <NumberTile>
-          <Input type="number"
-            disabled={gameOver}
-            placeholder="enter your guess"
-            onChange={handleInput}
-            value={guess}
-            onKeyDown={handleEnter}
-            autoFocus />
-          <Button disabled={gameOver} onClick={handleClick}>{"Guess"}</Button>
-        </NumberTile>
-      );
-    }
-  };
-
-  const handleClick = (e) => {
-    if (score === 0) {
-      setScore(1);
-      setShowNum(true);
-      setTimeout(() => {
-        setShowNum(false);
-      }, NUM_SHOW_DURATION);
+    if (guess !== number) {
+      saveResults(dayString, 'number', number.length);
+      setFinished(true);
       return;
     }
 
-    if (guess === num) {
-      setScore(score + 1);
-      setNum(num + randomNumberInRange(0, 9));
-      setShowNum(true);
-
-      setTimeout(() => {
-        setShowNum(false);
-      }, NUM_SHOW_DURATION);
-
-    } else {
-      toast(strings.endToast(score), { autoClose: 2000 });
-      saveResults(dayString, "number", score);
-      setGameOver(true);
-    }
-    setGuess("");
-  };
-  
-
-  const handleInput = (e) => {
-    setGuess(e.target.value);
-  };
-
-  const handleEnter = e => {
-    if (e.keyCode === 13) {
-      handleClick();
-    }
+    setNumber(number + randomDigit());
+    setGuess('');
+    setMemorizing(true);
   };
 
   return (
-    <BigContainer>
-    <ToastContainer
-        hideProgressBar
-        position="top-center"
-        transition={Flip}
-        autoClose={true}
-      />
-      { render() }
-    </BigContainer>
+    <GameLayout game="number">
+      {finished || storedScore != null ? (
+        <GameResult dayString={dayString} score={storedScore ?? number.length} nextGame="word">
+          {finished && (
+            <dl className="answer-review">
+              <div><dt>Correct number</dt><dd>{number}</dd></div>
+              <div><dt>Your guess</dt><dd>{guess}</dd></div>
+            </dl>
+          )}
+        </GameResult>
+      ) : !number ? (
+        <>
+          <p className="play-status">You’ll have {SECONDS_TO_MEMORIZE} seconds to memorize each number.</p>
+          <Button onClick={() => {
+            setNumber(randomDigit());
+            setMemorizing(true);
+          }}>Start game</Button>
+        </>
+      ) : (
+        <form className="number-round" onSubmit={submitGuess}>
+          <div className="round-status" role="status">
+            {memorizing ? <strong>Memorize this number</strong> :
+              <label htmlFor="number-guess"><strong>Enter the number you saw</strong></label>}
+            <span>Round {number.length}</span>
+          </div>
+          {memorizing ? (
+            <div className="number-display game-prompt">{number}</div>
+          ) : (
+            <input className="number-display number-input" id="number-guess" type="text"
+              inputMode="numeric" autoComplete="off" spellCheck={false} value={guess}
+              onChange={(event) => setGuess(event.target.value.replace(/[^0-9]/g, ''))}
+              autoFocus />
+          )}
+          <div className="number-action">
+            {memorizing ? (
+              <CountdownCircleTimer
+                isPlaying
+                duration={SECONDS_TO_MEMORIZE}
+                colors="var(--accent)"
+                trailColor="var(--border)"
+                size={48}
+                strokeWidth={4}
+                onComplete={() => { setMemorizing(false); }}
+              >
+                {({ remainingTime }) => <span aria-hidden="true">{remainingTime}</span>}
+              </CountdownCircleTimer>
+            ) : <Button type="submit" disabled={!guess}>Submit guess</Button>}
+          </div>
+        </form>
+      )}
+    </GameLayout>
   );
 };
