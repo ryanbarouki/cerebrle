@@ -14,17 +14,17 @@ const Grid = styled.div`
 
 const Square = styled.button`
   aspect-ratio: 1;
-  border: 1px solid #6898b2;
+  border: 1px solid var(--sequence-tile-border);
   padding: 0;
   background: var(--game-tint);
   border-radius: 12px;
 
   &:not([aria-disabled="true"]) { cursor: pointer; }
-  &:hover:not([aria-disabled="true"]) { background: #bfe7f8; }
+  &:hover:not([aria-disabled="true"]) { background: var(--sequence-tile-hover); }
 
   &[data-lit="true"], &:active:not([aria-disabled="true"]) {
     background: var(--brand-pink);
-    box-shadow: inset 0 0 0 3px #8d3153;
+    box-shadow: inset 0 0 0 3px var(--game-ink);
   }
 `;
 

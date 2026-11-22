@@ -36,7 +36,7 @@ export const Home = ({ dayString }) => (
     <section className="home-hero" aria-labelledby="home-title">
       <div className="hero-copy">
         <time dateTime={dayString}>{DateTime.fromISO(dayString).toLocaleString({ weekday: 'long', month: 'long', day: 'numeric' })}</time>
-        <h1 id="home-title">Daily memory<br />challenges<span>.</span></h1>
+        <h1 id="home-title">Daily memory<br /><span>challenges.</span></h1>
         <p>Three games to see how much you can remember.</p>
       </div>
       <div className="hero-art" aria-hidden="true">
