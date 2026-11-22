@@ -18,13 +18,18 @@ const Square = styled.button`
   padding: 0;
   background: var(--game-tint);
   border-radius: 12px;
+  -webkit-tap-highlight-color: transparent;
 
   &:not([aria-disabled="true"]) { cursor: pointer; }
-  &:hover:not([aria-disabled="true"]) { background: var(--sequence-tile-hover); }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled):not([aria-disabled="true"]):not([data-lit="true"]) {
+      background: var(--sequence-tile-hover);
+    }
+  }
 
-  &[data-lit="true"], &:active:not([aria-disabled="true"]) {
+  &[data-lit="true"] {
+    border-color: var(--brand-pink);
     background: var(--brand-pink);
-    box-shadow: inset 0 0 0 3px var(--game-ink);
   }
 `;
 
@@ -42,6 +47,7 @@ export const SequenceMain = ({ dayString }) => {
   const [watching, setWatching] = useState(false);
   const [finished, setFinished] = useState(false);
   const firstTile = useRef(null);
+  const focusFirstTile = useRef(false);
   const round = sequence.length;
 
   useEffect(() => {
@@ -69,7 +75,7 @@ export const SequenceMain = ({ dayString }) => {
   }, [tap]);
 
   useEffect(() => {
-    if (round === 1 && watching) firstTile.current?.focus();
+    if (round === 1 && watching && focusFirstTile.current) firstTile.current?.focus();
   }, [round, watching]);
 
   const handleTile = (index) => {
@@ -116,7 +122,8 @@ export const SequenceMain = ({ dayString }) => {
               />
             ))}
           </Grid>
-          {round === 0 && <Button onClick={() => {
+          {round === 0 && <Button onClick={(event) => {
+            focusFirstTile.current = event.detail === 0;
             setSequence([randomTile()]);
             setWatching(true);
           }}>Start game</Button>}

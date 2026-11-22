@@ -28,7 +28,9 @@ test('sequence shows turn, progress and tap feedback, then saves the score', () 
   expect(screen.getByText('Your turn')).toBeTruthy();
   click('Tile 1');
   expect(button('Tile 1').dataset.lit).toBe('true');
-  advance(1500);
+  advance(180);
+  expect(button('Tile 1').dataset.lit).toBe('false');
+  advance(1320);
   click('Tile 1');
   expect(screen.getByText(/1 of 2 entered/)).toBeTruthy();
   click('Tile 3');
